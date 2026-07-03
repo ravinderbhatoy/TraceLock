@@ -1,0 +1,10 @@
+{% extends "complaints/base.html" %}
+{% block title %}
+  TraceLock 
+{% endblock %}
+
+{% block content %}
+  <a href="{% url 'complaints' %}">View Complaints</a>
+  <br>
+  <a href="{% url 'create' %}">create Complaints</a>
+{% endblock content %}

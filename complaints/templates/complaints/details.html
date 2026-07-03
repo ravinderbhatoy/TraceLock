@@ -1,0 +1,8 @@
+{% extends "complaints/base.html" %}
+{% block title %}
+  {{ complaint.case }} {{ complaint.model }}
+{% endblock %}
+{% block content %}
+    <h2>{{ complaint.case }} {{ complaint.model }}</h2>
+    <h4>{{ complaint.date_of_incidence }}</h4>
+{% endblock content %}
