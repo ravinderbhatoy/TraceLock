@@ -1,5 +1,6 @@
 from .models import User, Complaint
 from django import forms
+from django.utils import timezone
 
 
 class UserForm(forms.ModelForm):
@@ -14,6 +15,11 @@ class ComplaintForm(forms.ModelForm):
         fields = "__all__"
 
         widgets = {
-            "date_of_incidence": forms.DateInput(format="%Y-%m-%d",
-                                                 attrs={"type": "date"}),
+            "date_of_incidence": forms.DateInput(
+                format="%Y-%m-%d",
+                attrs={
+                    "type": "date",
+                    "max": timezone.now().date().isoformat()
+                }
+            ),
         }

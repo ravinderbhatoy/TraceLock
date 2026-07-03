@@ -26,18 +26,22 @@ SECRET_KEY = 'django-insecure-7827l2m$rg@z=@6#vydsqaxihh=_y@r1=)=6kiqxc@a2k(w&1=
 DEBUG = True
 
 ALLOWED_HOSTS = []
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    "complaints.apps.AppConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "complaints.apps.ComplaintsConfig",
+    "accounts.apps.AccountsConfig",
+
 ]
 
 MIDDLEWARE = [
@@ -68,7 +72,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tracelock.wsgi.application'
-AUTH_USER_MODEL = "complaints.User"
+AUTH_USER_MODEL = "accounts.User"
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases

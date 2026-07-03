@@ -2,6 +2,6 @@
 
 [] Basic CRUD
     [x]Read
-    []Create
+    [x]Create
     []Update
     []Delete

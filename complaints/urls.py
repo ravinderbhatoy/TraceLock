@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
 
     # crud
     path("complaints/create/", views.CreateComplaint.as_view(), name="create"),
+    path("accounts/", include("django.contrib.auth.urls")),
 ]

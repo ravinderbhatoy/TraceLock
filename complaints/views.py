@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .models import Complaint
 from django.views import View
-from .forms import UserForm, ComplaintForm
+from .forms import ComplaintForm
 
 # Create your views here.
 
@@ -37,6 +37,8 @@ class ComplaintDetails(View):
 
 
 class CreateComplaint(View):
+    # TODO
+    # Backend validation for date_of_incidence(avoid future dates)
     template_name = "complaints/create.html"
     initial = {"owner":  1}
     form_class = ComplaintForm
@@ -48,5 +50,6 @@ class CreateComplaint(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-            return HttpResponseRedirect('/success/')
+            form.save()
+            return HttpResponseRedirect('/')
         return render(request, self.template_name, {"form": form})
