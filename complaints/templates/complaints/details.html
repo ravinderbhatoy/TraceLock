@@ -1,8 +1,10 @@
-{% extends "complaints/base.html" %}
+{% extends "base.html" %}
 {% block title %}
   {{ complaint.case }} {{ complaint.model }}
 {% endblock %}
 {% block content %}
     <h2>{{ complaint.case }} {{ complaint.model }}</h2>
     <h4>{{ complaint.date_of_incidence }}</h4>
+    <a href="{% url 'delete' complaint.pk %}">Delete</a>
+    <a href="{% url 'update' complaint.pk %}">Update</a>
 {% endblock content %}

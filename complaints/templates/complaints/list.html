@@ -1,11 +1,11 @@
-{% extends "complaints/base.html" %}
+{% extends "base.html" %}
 {% block title %}
   Complaints
 {% endblock %}
 {% block content %}
    <h3>Registered Complaints</h3>
    <ul>
-      {% for complaint in complaints %}
+      {% for complaint in object_list %}
       <li>
         <a href="{% url 'details' complaint.pk  %}">{{complaint}}</a>
       </li>

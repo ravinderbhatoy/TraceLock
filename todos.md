@@ -1,7 +1,6 @@
 # Todo's
 
-[] Basic CRUD
-    [x]Read
-    [x]Create
-    []Update
-    []Delete
+[x] Basic CRUD
+[x] user authentication
+[] API Routes
+[] Serializers

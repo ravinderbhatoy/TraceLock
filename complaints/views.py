@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render, redirect, reverse
 from .models import Complaint
+from django.views.generic import ListView, UpdateView
 from django.views import View
 from .forms import ComplaintForm
 
@@ -14,22 +15,16 @@ class Home(View):
         return render(request, self.template_name)
 
 
-class Complaints(View):
-    complaints = Complaint.objects.all()
+class Complaints(ListView):
+    model = Complaint
     template_name = "complaints/list.html"
-    context = {
-        "complaints": complaints
-    }
-
-    def get(self, request):
-        return render(request, self.template_name, self.context)
 
 
 class ComplaintDetails(View):
     template_name = "complaints/details.html"
 
     def get(self, request, *args, **kwargs):
-        complaint = Complaint.objects.get(id=kwargs.get('id'))
+        complaint = Complaint.objects.get(pk=kwargs.get('pk'))
         context = {
             "complaint": complaint
         }
@@ -51,5 +46,29 @@ class CreateComplaint(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/')
+            return redirect('home')
         return render(request, self.template_name, {"form": form})
+
+
+class UpdateComplaint(UpdateView):
+    model = Complaint
+    template_name = "complaints/update.html"
+    form_class = ComplaintForm
+
+    def get_success_url(self):
+        return reverse("details", kwargs={"pk": self.object.pk})
+
+
+class DeleteComplaint(View):
+    def get(self, request, *args, **kwargs):
+        complaint = get_object_or_404(Complaint, pk=kwargs.get('pk'))
+        return render(
+            request,
+            'complaints/confirm_delete.html',
+            {'complaint': complaint}
+        )
+
+    def post(self, request, *args, **kwargs):
+        complaint = get_object_or_404(Complaint, pk=kwargs.get('pk'))
+        complaint.delete()
+        return redirect('complaints-list')

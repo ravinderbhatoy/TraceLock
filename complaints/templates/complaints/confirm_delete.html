@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Confirm Delete</h1>
+    <h2>{{ complaint.case }} {{ complaint.model }}</h2>
+    <form method="POST"">
+        {% csrf_token %}
+        <input type="submit" name="Delete" value="Delete">
+    </form>
+{% endblock %}

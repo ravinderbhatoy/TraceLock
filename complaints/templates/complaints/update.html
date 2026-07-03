@@ -4,8 +4,8 @@
 {% endblock %}
 {% block content %}
     <form method="POST">
-      {% csrf_token %}
-        {{ form }}
-        <button type="submit">Submit</button>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update</button>
     </form>
 {% endblock content %}

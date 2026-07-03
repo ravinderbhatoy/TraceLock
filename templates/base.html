@@ -8,7 +8,7 @@
         </title>
     </head>
     <body>
-        <h1><a href="{% url 'index' %}">TraceLock</a></h1>
+        <h1><a href="{% url 'home' %}">TraceLock</a></h1>
         {% if user.is_authenticated %}
             <p>Welcome {{ user.username }}</p>
             <form method="post" action="{% url 'logout' %}">
