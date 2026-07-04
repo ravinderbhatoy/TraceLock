@@ -9,7 +9,8 @@ class Complaint(models.Model):
     ]
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE,
-        default=User.get_default_user
+        default=User.get_default_user,
+        related_name='complaints'
     )
 
     model = models.CharField(max_length=100)

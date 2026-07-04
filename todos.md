@@ -2,5 +2,7 @@
 
 [x] Basic CRUD
 [x] user authentication
-[] API Routes
-[] Serializers
+[x] API Routes
+[x] Serializers
+
+[] frontend (react)

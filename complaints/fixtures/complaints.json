@@ -1,7 +1,6 @@
 [
   {
     "model": "complaints.complaint",
-    "pk": 1,
     "fields": {
       "owner": 1,
       "model": "Note 10 Pro",
@@ -15,7 +14,6 @@
   },
   {
     "model": "complaints.complaint",
-    "pk": 2,
     "fields": {
       "owner": 1,
       "model": "Galaxy S23",
@@ -29,7 +27,6 @@
   },
   {
     "model": "complaints.complaint",
-    "pk": 3,
     "fields": {
       "owner": 1,
       "model": "iPhone 14",
@@ -43,7 +40,6 @@
   },
   {
     "model": "complaints.complaint",
-    "pk": 4,
     "fields": {
       "owner": 1,
       "model": "Nord CE 4",
@@ -57,7 +53,6 @@
   },
   {
     "model": "complaints.complaint",
-    "pk": 5,
     "fields": {
       "owner": 1,
       "model": "Pixel 8",
@@ -71,7 +66,6 @@
   },
   {
     "model": "complaints.complaint",
-    "pk": 6,
     "fields": {
       "owner": 1,
       "model": "Moto G84",
@@ -85,7 +79,6 @@
   },
   {
     "model": "complaints.complaint",
-    "pk": 7,
     "fields": {
       "owner": 1,
       "model": "Realme GT 6",
@@ -99,7 +92,6 @@
   },
   {
     "model": "complaints.complaint",
-    "pk": 8,
     "fields": {
       "owner": 1,
       "model": "V50",
@@ -113,7 +105,6 @@
   },
   {
     "model": "complaints.complaint",
-    "pk": 9,
     "fields": {
       "owner": 1,
       "model": "Xiaomi 14",
@@ -127,7 +118,6 @@
   },
   {
     "model": "complaints.complaint",
-    "pk": 10,
     "fields": {
       "owner": 1,
       "model": "Nothing Phone (3)",
