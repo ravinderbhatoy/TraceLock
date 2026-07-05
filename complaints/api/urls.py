@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     path("", views.ComplaintList.as_view(), name="complaint-list"),
-    path("<int:pk>/", views.ComplaintDetails.as_view(), name="complaint"),
+    path("<int:pk>/", views.ComplaintDetails.as_view(), name="complaint-detail"),
 ]
 
 # our API will be able to handle URLs such as http://example.com/api/items/4.json.

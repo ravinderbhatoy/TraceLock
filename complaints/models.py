@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import User
+from users.models import User
 
 
 class Complaint(models.Model):
@@ -9,7 +9,6 @@ class Complaint(models.Model):
     ]
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE,
-        default=User.get_default_user,
         related_name='complaints'
     )
 

@@ -2,7 +2,7 @@
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 1,
+      "owner": 2,
       "model": "Note 10 Pro",
       "brand": "Redmi",
       "desc": "Phone stolen while travelling on a city bus.",
@@ -15,7 +15,7 @@
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 1,
+      "owner": 2,
       "model": "Galaxy S23",
       "brand": "Samsung",
       "desc": "Phone lost during shopping at the local market.",
@@ -28,7 +28,7 @@
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 1,
+      "owner": 2,
       "model": "iPhone 14",
       "brand": "Apple",
       "desc": "Phone snatched by two people on a motorcycle.",
@@ -41,7 +41,7 @@
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 1,
+      "owner": 2,
       "model": "Nord CE 4",
       "brand": "OnePlus",
       "desc": "Phone left in an auto-rickshaw and could not be recovered.",
@@ -54,7 +54,7 @@
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 1,
+      "owner": 2,
       "model": "Pixel 8",
       "brand": "Google",
       "desc": "Phone stolen from office desk during lunch break.",
