@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions
+from rest_framework import serializers
 from complaints.models import Complaint
 from users.api.permissions import IsOwnerOrReadOnly
 from .serializers import ComplaintSerializer
@@ -26,7 +27,15 @@ class ComplaintList(generics.ListCreateAPIView):
 
     # auto associate owner
     def perform_create(self, serializer):
-        serializer.save(filed_by=self.request.user)
+        user = self.request.user
+        city = serializer.validated_data.get('city')
+        if not city:
+            raise serializers.ValidationError("City is required")
+        if not hasattr(city, 'station'):
+            raise serializers.ValidationError(
+                "No station found for selected city")
+        serializer.save(filed_by=user,
+                        station=city.station)
 
 
 class ComplaintDetails(generics.RetrieveUpdateDestroyAPIView):

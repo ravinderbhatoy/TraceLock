@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from users.models import User
+from users.models import User, Station
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -14,6 +14,24 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "email",
             "complaints",
             "city",
+            "state",
+            "address",
+        ]
+
+
+class StationSerializer(serializers.HyperlinkedModelSerializer):
+    city = serializers.ReadOnlyField(source="city.name")
+    state = serializers.ReadOnlyField(source="city.state.name")
+    user = serializers.ReadOnlyField(source="user.username")
+
+    class Meta:
+        model = Station
+        fields = [
+            "url",
+            "name",
+            "user",
+            "city",
+            "address",
             "state",
             "address",
         ]

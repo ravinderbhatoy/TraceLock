@@ -5,6 +5,7 @@ from complaints.models import Complaint
 class ComplaintSerializer(serializers.HyperlinkedModelSerializer):
     city = serializers.ReadOnlyField(source="city.name")
     state = serializers.ReadOnlyField(source="city.state.name")
+    station = serializers.ReadOnlyField(source="station.name")
 
     class Meta:
         model = Complaint
@@ -16,9 +17,11 @@ class ComplaintSerializer(serializers.HyperlinkedModelSerializer):
             "case",
             "city",
             "state",
+            "date_of_incidence",
             "desc",
             "filed_at",
             "station",
+            "status",
         ]
 
 # from documentation

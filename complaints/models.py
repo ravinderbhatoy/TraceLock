@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 BRAND_CHOICES = [
     ("Apple", "Apple"),
@@ -36,6 +38,18 @@ class City(models.Model):
         return self.name
 
 
+def validate_not_future_day(value):
+    if value:
+        # Get today's date in the current active timezone
+        today = timezone.localdate()
+        # Extract the date from the input datetime
+        input_date = timezone.localdate(value)
+
+        if input_date > today:
+            raise ValidationError(
+                "The date of incidence cannot be in the future.")
+
+
 class Complaint(models.Model):
     CASE_CHOICES = [
         ('S', 'Stolen'),
@@ -55,10 +69,12 @@ class Complaint(models.Model):
     brand = models.CharField(max_length=50, choices=BRAND_CHOICES)
     desc = models.TextField()
     case = models.CharField(max_length=1, choices=CASE_CHOICES)
-    date_of_incidence = models.DateTimeField(null=True, blank=True)
+    date_of_incidence = models.DateTimeField(null=True,
+                                             blank=True,
+                                             validators=[validate_not_future_day])
     filed_at = models.DateTimeField(auto_now_add=True)
     station = models.ForeignKey('users.Station', on_delete=models.SET_NULL,
-                                null=True, related_name='complaints')
+                                null=True, related_name='complaints', blank=True)
 
     STATUS_CHOICES = [
         ('filed', 'Filed'),
@@ -74,6 +90,14 @@ class Complaint(models.Model):
     rejection_reason = models.CharField(max_length=100, blank=True)
     verified_at = models.DateTimeField(null=True, blank=True)
     resolved_at = models.DateTimeField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.city:
+            try:
+                self.station = self.city.station
+            except Exception:
+                pass
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.model
