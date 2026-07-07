@@ -3,20 +3,22 @@ from complaints.models import Complaint
 
 
 class ComplaintSerializer(serializers.HyperlinkedModelSerializer):
-    owner = serializers.ReadOnlyField(source="owner.username")
+    city = serializers.ReadOnlyField(source="city.name")
+    state = serializers.ReadOnlyField(source="city.state.name")
 
     class Meta:
         model = Complaint
         fields = [
             "url",  # links view(complaint-detail) automatically
-            "owner",
+            "filed_by",
             "model",
             "brand",
             "case",
-            "location",
+            "city",
+            "state",
             "desc",
-            "date_of_incidence",
-            "register_at"
+            "filed_at",
+            "station",
         ]
 
 # from documentation

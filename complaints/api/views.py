@@ -19,14 +19,14 @@ def api_root(request, format=None):
 
 
 class ComplaintList(generics.ListCreateAPIView):
-    queryset = Complaint.objects.all().order_by('-register_at')
+    queryset = Complaint.objects.all().order_by('-filed_at')
     serializer_class = ComplaintSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
 
     # auto associate owner
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(filed_by=self.request.user)
 
 
 class ComplaintDetails(generics.RetrieveUpdateDestroyAPIView):

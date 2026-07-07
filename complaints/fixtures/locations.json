@@ -1,0 +1,52 @@
+[
+  {
+    "model": "complaints.state",
+    "pk": 1,
+    "fields": { "name": "Punjab" }
+  },
+  {
+    "model": "complaints.state",
+    "pk": 2,
+    "fields": { "name": "Delhi" }
+  },
+  {
+    "model": "complaints.state",
+    "pk": 3,
+    "fields": { "name": "Maharashtra" }
+  },
+  {
+    "model": "complaints.state",
+    "pk": 4,
+    "fields": { "name": "Uttrakhand" }
+  },
+  {
+    "model": "complaints.state",
+    "pk": 5,
+    "fields": { "name": "Rajasthan" }
+  },
+  {
+    "model": "complaints.city",
+    "pk": 1,
+    "fields": { "state": 1, "name": "Ludhiana" }
+  },
+  {
+    "model": "complaints.city",
+    "pk": 2,
+    "fields": { "state": 1, "name": "Jalandhar" }
+  },
+  {
+    "model": "complaints.city",
+    "pk": 3,
+    "fields": { "state": 3, "name": "Mumbai" }
+  },
+  {
+    "model": "complaints.city",
+    "pk": 4,
+    "fields": { "state": 4, "name": "Haridwar" }
+  },
+  {
+    "model": "complaints.city",
+    "pk": 5,
+    "fields": { "state": 5, "name": "Haridwar" }
+  }
+]

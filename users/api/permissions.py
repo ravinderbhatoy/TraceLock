@@ -13,4 +13,4 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
 
         # Write permissions are only allowed to the owner of the complaints.
-        return obj.owner == request.user
+        return obj.filed_by == request.user

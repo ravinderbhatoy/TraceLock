@@ -2,131 +2,122 @@
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 2,
+      "filed_by": 2,
       "model": "Note 10 Pro",
       "brand": "Redmi",
       "desc": "Phone stolen while travelling on a city bus.",
       "case": "S",
-      "location": "Basti Jodhewal, Ludhiana",
-      "date_of_incidence": "2026-06-20T10:15:00Z",
-      "register_at": "2026-06-20T12:00:00Z"
+      "city": 1,
+      "filed_at": "2026-06-20T10:15:00Z"
     }
   },
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 2,
+      "filed_by": 2,
       "model": "Galaxy S23",
+      "city": 2,
       "brand": "Samsung",
       "desc": "Phone lost during shopping at the local market.",
       "case": "L",
-      "location": "Chaura Bazaar, Ludhiana",
-      "date_of_incidence": "2026-06-18T16:45:00Z",
-      "register_at": "2026-06-18T18:00:00Z"
+      "filed_at": "2026-06-18T16:45:00Z"
     }
   },
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 2,
+      "filed_by": 2,
       "model": "iPhone 14",
       "brand": "Apple",
+      "city": 4,
       "desc": "Phone snatched by two people on a motorcycle.",
       "case": "S",
-      "location": "Ferozepur Road, Ludhiana",
-      "date_of_incidence": "2026-06-15T20:30:00Z",
-      "register_at": "2026-06-15T21:10:00Z"
+      "filed_at": "2026-06-15T20:30:00Z"
     }
   },
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 2,
+      "filed_by": 2,
       "model": "Nord CE 4",
       "brand": "OnePlus",
+      "city": 4,
       "desc": "Phone left in an auto-rickshaw and could not be recovered.",
       "case": "L",
-      "location": "Bus Stand, Ludhiana",
-      "date_of_incidence": "2026-06-12T14:20:00Z",
-      "register_at": "2026-06-12T15:00:00Z"
+      "filed_at": "2026-06-12T14:20:00Z"
     }
   },
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 2,
+      "filed_by": 2,
       "model": "Pixel 8",
       "brand": "Google",
       "desc": "Phone stolen from office desk during lunch break.",
+      "city": 5,
       "case": "S",
-      "location": "Model Town, Ludhiana",
-      "date_of_incidence": "2026-06-10T13:00:00Z",
-      "register_at": "2026-06-10T14:15:00Z"
+      "filed_at": "2026-06-10T13:00:00Z"
     }
   },
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 1,
+      "filed_by": 1,
       "model": "Moto G84",
       "brand": "Motorola",
       "desc": "Phone misplaced at a restaurant.",
+      "city": 5,
       "case": "L",
-      "location": "Pakhowal Road, Ludhiana",
-      "date_of_incidence": "2026-06-08T19:10:00Z",
-      "register_at": "2026-06-08T20:00:00Z"
+      "filed_at": "2026-06-08T19:10:00Z"
     }
   },
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 1,
+      "filed_by": 1,
       "model": "Realme GT 6",
       "brand": "Realme",
       "desc": "Phone stolen during a crowded festival.",
+      "city": 3,
       "case": "S",
-      "location": "Gill Road, Ludhiana",
-      "date_of_incidence": "2026-06-05T18:40:00Z",
-      "register_at": "2026-06-05T19:25:00Z"
+      "desc": "Phone forgotten in a taxi.",
+      "filed_at": "2026-06-05T18:40:00Z"
     }
   },
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 1,
+      "filed_by": 1,
       "model": "V50",
       "brand": "Vivo",
       "desc": "Phone forgotten in a taxi.",
+      "city": 3,
       "case": "L",
-      "location": "Railway Station, Ludhiana",
-      "date_of_incidence": "2026-06-03T11:30:00Z",
-      "register_at": "2026-06-03T12:05:00Z"
+      "filed_at": "2026-06-03T11:30:00Z"
     }
   },
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 1,
+      "filed_by": 1,
       "model": "Xiaomi 14",
       "brand": "Xiaomi",
+      "city": 3,
       "desc": "Phone stolen from backpack while commuting.",
       "case": "S",
-      "location": "Civil Lines, Ludhiana",
-      "date_of_incidence": "2026-06-01T09:50:00Z",
-      "register_at": "2026-06-01T10:30:00Z"
+      "filed_at": "2026-06-01T09:50:00Z"
     }
   },
   {
     "model": "complaints.complaint",
     "fields": {
-      "owner": 1,
+      "filed_by": 1,
       "model": "Nothing Phone (3)",
       "brand": "Nothing",
+      "city": 5,
       "desc": "Phone lost during a college event.",
       "case": "L",
-      "location": "Punjab Agricultural University, Ludhiana",
-      "date_of_incidence": "2026-05-28T17:15:00Z",
-      "register_at": "2026-05-28T18:00:00Z"
+      "filed_at": "2026-05-28T17:15:00Z"
     }
   }
 ]

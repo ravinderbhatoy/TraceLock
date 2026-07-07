@@ -5,11 +5,10 @@
 [x] API Routes
 [x] Serializers
 
-[] drop down options(brands, city, state)
-[] staffProfile
-[] complaint status (fille, under_investigation, recovered, closed)
+[x] drop down options(brands, city, state)
+[x] staffProfile (who handles complaints)
+[x] complaint status (under_investigation, resolved, closed)
+
 
 [] Found request
-
-
 [] frontend (react)

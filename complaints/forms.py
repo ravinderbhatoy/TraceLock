@@ -1,6 +1,7 @@
-from .models import User, Complaint
+from .models import Complaint
 from django import forms
 from django.utils import timezone
+from users.models import User
 
 
 class UserForm(forms.ModelForm):

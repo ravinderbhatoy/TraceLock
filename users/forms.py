@@ -19,7 +19,7 @@ class SignUpForm(UserCreationForm):
 class CustomUserCreationForm(AdminUserCreationForm):
     class Meta(AdminUserCreationForm.Meta):
         model = User
-        fields = AdminUserCreationForm.Meta.fields + ("city", "state")
+        fields = AdminUserCreationForm.Meta.fields + ("city",)
 
 
 class CustomUserChangeForm(UserChangeForm):

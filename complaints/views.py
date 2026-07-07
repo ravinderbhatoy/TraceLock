@@ -1,4 +1,3 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 from .models import Complaint
 from django.views.generic import ListView, UpdateView
@@ -35,7 +34,6 @@ class CreateComplaint(View):
     # TODO
     # Backend validation for date_of_incidence(avoid future dates)
     template_name = "complaints/create.html"
-    initial = {"owner":  1}
     form_class = ComplaintForm
 
     def get(self, request, *args, **kwargs):
