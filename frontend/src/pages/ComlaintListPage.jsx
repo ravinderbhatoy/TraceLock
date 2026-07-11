@@ -31,13 +31,17 @@ export const ComlaintListPage = () => {
   return (
     <section id="">
       <h1>Recent Complaints</h1>
-      <ul>
-        {complaints.map((complaint, index) => (
-          <li key={index}>
-            {complaint.brand} {complaint.model}
-          </li>
-        ))}
-      </ul>
+      {complaints?.length ? (
+        <ul>
+          {complaints.map((complaint, index) => (
+            <li key={index}>
+              {complaint.brand} {complaint.model}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No complaints found.</p>
+      )}
     </section>
   );
 };

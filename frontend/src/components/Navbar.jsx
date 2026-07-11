@@ -6,8 +6,17 @@ import {
   NavbarToggle,
 } from "flowbite-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../components/AuthProvider";
 
 export function NavbarComponent() {
+  const { token, setToken } = useAuth();
+
+  const logout = () => {
+    console.log("Logging out...");
+    setToken(null);
+    localStorage.removeItem("token");
+  };
+
   return (
     <Navbar fluid rounded>
       <NavbarBrand as={Link} to="/">
@@ -25,12 +34,25 @@ export function NavbarComponent() {
         <NavbarLink as={Link} to="/" active>
           Home
         </NavbarLink>
-        <NavbarLink as={Link} to="/signin">
-          SignIn
-        </NavbarLink>
-        <NavbarLink as={Link} to="/signup">
-          SignUp
-        </NavbarLink>
+        {token ? (
+          <>
+            <NavbarLink as={Link} to="/profile">
+              Profile
+            </NavbarLink>
+            <NavbarLink as={Link} to="/" onClick={logout}>
+              Logout
+            </NavbarLink>
+          </>
+        ) : (
+          <>
+            <NavbarLink as={Link} to="/signin">
+              SignIn
+            </NavbarLink>
+            <NavbarLink as={Link} to="/signup">
+              SignUp
+            </NavbarLink>
+          </>
+        )}
       </NavbarCollapse>
     </Navbar>
   );

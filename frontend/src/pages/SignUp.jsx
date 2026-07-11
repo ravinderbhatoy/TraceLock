@@ -1,21 +1,47 @@
-import React from "react";
 import { useForm } from "react-hook-form";
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { useState, useEffect } from "react";
+import {
+  Button,
+  Checkbox,
+  Label,
+  TextInput,
+  Textarea,
+  Select,
+} from "flowbite-react";
+import axiosClient from "../api/axiosClient";
 
 const SignUp = () => {
+  const [cities, setCities] = useState([]);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const json = JSON.stringify(data);
-    console.log(json);
+    try {
+      const response = await axiosClient.post("/users/auth/register/", json, {
+        headers: { "Content-Type": "application/json" },
+      });
+      localStorage.setItem("user", JSON.stringify(response.data));
+    } catch (error) {
+      console.error("Error signing up:", error.response.data);
+    }
   };
 
+  useEffect(() => {
+    const fetchCities = async () => {
+      const response = await axiosClient.get("/complaints/cities/");
+      setCities(response.data.results);
+    };
+    fetchCities();
+  }, []);
+
+  console.log(cities);
+
   return (
-    <div className="flex flex-col justify-center items-center border-2 m-12 p-8 border-gray-400 rounded-2xl">
+    <div className="flex flex-col justify-center items-center border-2  p-4 border-gray-400 rounded-2xl shadow-lg max-w-200 mx-auto mt-10">
       <h2 className="font-semibold text-3xl">Sign Up</h2>
       <form
         className="flex w-full max-w-lg flex-col gap-4"
@@ -23,43 +49,49 @@ const SignUp = () => {
       >
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="firstname">First Name</Label>
+            <Label htmlFor="first_name">First Name</Label>
           </div>
-<TextInput
-            {...register("firstname", { required: "first name is required" })}
+          <TextInput
+            required
+            {...register("first_name", { required: "first name is required" })}
           />
-          {errors.firstname && <p>{errors.firstname.message}</p>}
+          {errors.first_name && <p>{errors.first_name.message}</p>}
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="lastname">Last Name</Label>
+            <Label htmlFor="last_name">Last Name</Label>
           </div>
-<TextInput
-            {...register("lastname", { required: "last name is required" })}
+          <TextInput
+            {...register("last_name", { required: "last name is required" })}
           />
-          {errors.lastname && <p>{errors.lastname.message}</p>}
+          {errors.last_name && <p>{errors.last_name.message}</p>}
         </div>
         <div>
           <div className="mb-2 block">
             <Label htmlFor="city">City</Label>
           </div>
-<TextInput
-            {...register("city", { required: "City is required" })}
-          />
+          <Select {...register("city", { required: "City is required" })}>
+            <option value="">Select a city</option>
+            {cities.map((city) => (
+              <option key={city.id} value={city.id}>
+                {city.name}
+              </option>
+            ))}
+          </Select>
           {errors.city && <p>{errors.city.message}</p>}
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="state">State</Label>
+            <Label htmlFor="address">Address</Label>
           </div>
-<TextInput
-            {...register("state", { required: "State is required" })}
+          <Textarea
+            {...register("address", { required: "Address is required" })}
           />
-          {errors.state && <p>{errors.state.message}</p>}
+          {errors.address && <p>{errors.address.message}</p>}
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="email1">Username</Label>
+            <Label htmlFor="username">Username</Label>
           </div>
           <TextInput
             {...register("username", { required: "Username is required" })}
@@ -71,7 +103,8 @@ const SignUp = () => {
           <div className="mb-2 block">
             <Label htmlFor="email1">Email</Label>
           </div>
-<TextInput
+          <TextInput
+            type="email"
             {...register("email", { required: "Email is required" })}
           />
           {errors.email && <p>{errors.email.message}</p>}
@@ -80,19 +113,23 @@ const SignUp = () => {
           <div className="mb-2 block">
             <Label htmlFor="password1">password</Label>
           </div>
-<TextInput
-            {...register("password", { required: "Password is required" })}
+          <TextInput
+            type="password"
+            {...register("password1", { required: "Password is required" })}
           />
-          {errors.password && <p>{errors.password.message}</p>}
+          {errors.password1 && <p>{errors.password1.message}</p>}
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="password1">Confirm password</Label>
+            <Label htmlFor="password2">Confirm password</Label>
           </div>
-<TextInput
-            {...register("confirmPassword", { required: "Please confirm your password" })}
+          <TextInput
+            type="password"
+            {...register("password2", {
+              required: "Please confirm your password",
+            })}
           />
-          {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+          {errors.password2 && <p>{errors.password2.message}</p>}
         </div>
         <div className="flex items-center gap-2">
           <Checkbox id="remember" />
