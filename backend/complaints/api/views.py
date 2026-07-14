@@ -1,8 +1,8 @@
 from rest_framework import generics, permissions
 from rest_framework import serializers
-from complaints.models import Complaint
+from complaints.models import Complaint, City
 from users.api.permissions import IsOwnerOrReadOnly
-from .serializers import ComplaintSerializer
+from .serializers import ComplaintSerializer, CitySerializer
 from rest_framework.reverse import reverse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -19,10 +19,22 @@ def api_root(request, format=None):
     )
 
 
+class CityList(generics.ListAPIView):
+    queryset = City.objects.all()
+    serializer_class = CitySerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class CityDetails(generics.RetrieveUpdateDestroyAPIView):
+    queryset = City.objects.all()
+    serializer_class = CitySerializer
+    permission_classes = [permissions.AllowAny]
+
+
 class ComplaintList(generics.ListCreateAPIView):
     queryset = Complaint.objects.all().order_by('-filed_at')
     serializer_class = ComplaintSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+    permission_classes = [permissions.IsAuthenticated,
                           IsOwnerOrReadOnly]
 
     # auto associate owner

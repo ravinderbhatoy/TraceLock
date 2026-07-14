@@ -7,5 +7,6 @@ urlpatterns = [
     path("stations/", views.StationList.as_view(), name='station-list'),
     path("stations/<int:pk>/",
          views.StationDetail.as_view(), name='station-detail'),
-    path("auth/", include('rest_framework.urls'))
+    path("auth/", include('rest_framework.urls')),
+    path('auth/register/', views.UserRegistrationView.as_view(), name='user-register'),
 ]

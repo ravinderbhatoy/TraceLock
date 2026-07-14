@@ -1,5 +1,18 @@
 from rest_framework import serializers
-from complaints.models import Complaint
+from complaints.models import Complaint, City
+
+
+class CitySerializer(serializers.HyperlinkedModelSerializer):
+    state = serializers.ReadOnlyField(source="state.name")
+
+    class Meta:
+        model = City
+        fields = [
+            "url",  # links view(complaint-detail) automatically
+            "id",
+            "name",
+            "state"
+        ]
 
 
 class ComplaintSerializer(serializers.HyperlinkedModelSerializer):

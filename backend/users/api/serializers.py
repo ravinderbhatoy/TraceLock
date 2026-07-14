@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from users.models import User, Station
+from django.contrib.auth.password_validation import validate_password
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -10,6 +11,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = [
             "url",
+            "first_name",
+            "last_name",
             "username",
             "email",
             "complaints",
@@ -17,6 +20,31 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "state",
             "address",
         ]
+
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password1 = serializers.CharField(write_only=True,
+                                      validators=[validate_password])
+    password2 = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2', 'first_name',
+                  'last_name', 'city',  'address']
+
+    def validate(self, attrs):
+        if attrs['password1'] != attrs['password2']:
+            raise serializers.ValidationError(
+                {"password2": "Passwords do not match."})
+        return attrs
+
+    def create(self, validated_data):
+        validated_data.pop('password2')
+        password = validated_data.pop('password1')
+        user = User(**validated_data)
+        user.set_password(password)  # critical — never save raw password
+        user.save()
+        return user
 
 
 class StationSerializer(serializers.HyperlinkedModelSerializer):

@@ -1,16 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from complaints.models import City
-# Create your models here.
 
 
 class User(AbstractUser):
     city = models.ForeignKey(
         City, on_delete=models.PROTECT,
         null=True, related_name="city",
+        blank=True
     )
 
     address = models.TextField()
+    email = models.EmailField(unique=True)
 
     def is_station(self):
         return hasattr(self, 'station')
