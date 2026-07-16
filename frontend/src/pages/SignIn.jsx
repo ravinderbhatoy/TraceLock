@@ -16,9 +16,7 @@ const SignIn = () => {
 
   const onSubmit = async (data) => {
     try {
-    const response = await axiosClient.post("/token/", data, {
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await axiosClient.post("/token/", data);
     localStorage.setItem("token", JSON.stringify(response.data));
     setToken(response.data);
     navigate("/");

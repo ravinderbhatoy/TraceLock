@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
+import { useAuth } from "../components/AuthProvider";
 
 export const ComlaintListPage = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const { token } = useAuth();
 
   useEffect(() => {
     const fetchComplaint = async () => {
@@ -24,6 +26,8 @@ export const ComlaintListPage = () => {
     };
     fetchComplaint();
   }, []);
+
+  if (!token) return <p>Please login to view complaints</p>;
 
   if (error) return <p>Something went wrong...</p>;
   if (loading) return <p>Loading complaint... </p>;

@@ -5,11 +5,18 @@ import {
   useLayoutEffect,
   useContext,
 } from "react";
+
 import axiosClient from "../api/axiosClient";
 import useRefreshToken from "../hooks/useRefreshToken";
 
 const AuthContext = createContext(undefined);
-const refresh = useRefreshToken();
+const { refresh } = useRefreshToken();
+
+const refreshToken = async () => {
+  const newToken = await refresh();
+  setToken(newToken);
+  return newToken;
+};
 
 export const useAuth = () => {
   const authContext = useContext(AuthContext);

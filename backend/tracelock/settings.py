@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     "complaints.apps.ComplaintsConfig",
     "users.apps.UsersConfig",
 ]
@@ -57,11 +59,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
 
 ROOT_URLCONF = 'tracelock.urls'
 
@@ -134,6 +131,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'users.api.authentication.JWTCookieAuthentication',
+        'rest_framework.authentication.SessionAuthentication',  # Required for web view
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -143,4 +141,20 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,           # new refresh token on every refresh
+    'BLACKLIST_AFTER_ROTATION': True,          # old refresh token becomes invalid
+
+    'AUTH_COOKIE': 'access_token',
+    'REFRESH_COOKIE': 'refresh_token',
+    'AUTH_COOKIE_HTTP_ONLY': True,
+    'AUTH_COOKIE_SECURE': False,     # True in production (HTTPS only)
+    'AUTH_COOKIE_SAMESITE': 'Lax',   # 'None' only if frontend/backend on different domains + HTTPS
+    'AUTH_COOKIE_PATH': '/',
 }
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]

@@ -12,9 +12,8 @@ export function NavbarComponent() {
   const { token, setToken } = useAuth();
 
   const logout = () => {
-    console.log("Logging out...");
-    setToken(null);
     localStorage.removeItem("token");
+    setToken(null);
   };
 
   return (
