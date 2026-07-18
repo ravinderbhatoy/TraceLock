@@ -84,8 +84,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         del response.data['refresh']
         return response
 
-        return Response({"success": False, "error": str(e)})
-
 
 class LogoutView(APIView):
     def post(self, request):
@@ -113,7 +111,6 @@ class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -128,6 +125,20 @@ class UserRegistrationView(generics.CreateAPIView):
             "refresh": str(refresh),
             "access": str(refresh.access_token),
         }, status=201)
+
+
+class UserMeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        return Response({
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+        })
 
 
 class UserList(generics.ListAPIView):

@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "./components/AuthProvider";
+import { AuthProvider } from "./context/AuthProvider";
 import { ThemeInit } from "../.flowbite-react/init";
 import "./index.css";
 import App from "./App.jsx";

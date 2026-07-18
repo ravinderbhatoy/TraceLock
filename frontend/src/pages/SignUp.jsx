@@ -24,9 +24,19 @@ const SignUp = () => {
       const response = await axiosClient.post("/users/auth/register/", json, {
         headers: { "Content-Type": "application/json" },
       });
-      localStorage.setItem("user", JSON.stringify(response.data));
+      console.log(response)
+      if (!response.ok){
+        const result = response.json()
+        // Map backend errors to fields
+        Object.keys(result.errors).forEach((field) => {
+          setError(field, {
+            type: "server",
+            message: result.errors[field],
+          });
+        });
+      }
     } catch (error) {
-      console.error("Error signing up:", error.response.data);
+      console.error("Error signing up:", error.response.status);
     }
   };
 

@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
-import { useAuth } from "../components/AuthProvider";
+import { useAuth } from "../context/AuthProvider";
 
-export const ComlaintListPage = () => {
+export const ComplaintListPage = () => {
   const [complaints, setComplaints] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const { token } = useAuth();
+  const { loading, logout } = useAuth();
 
   useEffect(() => {
     const fetchComplaint = async () => {
@@ -17,17 +16,16 @@ export const ComlaintListPage = () => {
           setComplaints(response.data.results);
         }
       } catch (err) {
+        if (error.response){
+          if (error.response.status == 401) {
+            await logout()
+          }
+        }
         setError(true);
-        console.log(err.response.status);
-        console.log(err.response.data);
-      } finally {
-        setLoading(false);
       }
     };
     fetchComplaint();
   }, []);
-
-  if (!token) return <p>Please login to view complaints</p>;
 
   if (error) return <p>Something went wrong...</p>;
   if (loading) return <p>Loading complaint... </p>;

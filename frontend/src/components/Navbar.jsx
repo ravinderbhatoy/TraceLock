@@ -5,15 +5,17 @@ import {
   NavbarLink,
   NavbarToggle,
 } from "flowbite-react";
-import { Link } from "react-router-dom";
-import { useAuth } from "../components/AuthProvider";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
 
 export function NavbarComponent() {
-  const { token, setToken } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
+  const handleLogout = async (event) => {
+    event.preventDefault();
+    await logout();
+    navigate("/");
   };
 
   return (
@@ -33,12 +35,12 @@ export function NavbarComponent() {
         <NavbarLink as={Link} to="/" active>
           Home
         </NavbarLink>
-        {token ? (
+        {user ? (
           <>
             <NavbarLink as={Link} to="/profile">
               Profile
             </NavbarLink>
-            <NavbarLink as={Link} to="/" onClick={logout}>
+            <NavbarLink href="/" onClick={handleLogout}>
               Logout
             </NavbarLink>
           </>

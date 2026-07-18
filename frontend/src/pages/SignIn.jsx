@@ -1,29 +1,35 @@
 import { useForm } from "react-hook-form";
-import { useAuth } from "../components/AuthProvider";
+import { useAuth } from "../context/AuthProvider";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
-import { useNavigate } from "react-router-dom";
-import axiosClient from "../api/axiosClient";
+import { useEffect } from "react";
 
 const SignIn = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    reset,
+    formState: { errors, isSubmitSuccessful },
+  } = useForm({
+    defaultValues: {username: "", password: ""}
+  });
 
-  const { setToken } = useAuth();
-  const navigate = useNavigate();
+  const { login, navigate } = useAuth();
 
   const onSubmit = async (data) => {
     try {
-    const response = await axiosClient.post("/token/", data);
-    localStorage.setItem("token", JSON.stringify(response.data));
-    setToken(response.data);
-    navigate("/");
+      await login(data.username, data.password);
+      navigate("/profile");
     } catch (error) {
-      console.error("Error signing in:", error);
+      console.log(error)
+      alert("Login Failed");
     }
   };
+
+  useEffect(() => {
+    if (isSubmitSuccessful){
+      reset()
+    }
+  }, [isSubmitSuccessful, reset])
 
   return (
     <section className="flex flex-col justify-center items-center border-2 m-12 p-8 border-gray-400 rounded-2xl max-w-200 mx-auto mt-10">
@@ -40,16 +46,6 @@ const SignIn = () => {
             {...register("username", { required: "Username is required" })}
           />
           {errors.username && <p>{errors.username.message}</p>}
-        </div>
-
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="email1">Email</Label>
-          </div>
-          <TextInput
-            {...register("email", { required: "Email is required" })}
-          />
-          {errors.email && <p>{errors.email.message}</p>}
         </div>
         <div>
           <div className="mb-2 block">
