@@ -4,7 +4,7 @@ import React from 'react'
 const Profile = () => {
   const {user} = useAuth()
   return (
-    <div>Hello {user.username}</div>
+    <h1 className='text-2xl font-semibold text-blue-500 text-center'>Hello {user.username}</h1>
   )
 }
 

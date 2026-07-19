@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
 import { useAuth } from "../context/AuthProvider";
+import ComplaintCard from "@/components/complaintCard";
 
 export const ComplaintListPage = () => {
   const [complaints, setComplaints] = useState([]);
@@ -31,19 +32,25 @@ export const ComplaintListPage = () => {
   if (loading) return <p>Loading complaint... </p>;
 
   return (
-    <section id="">
-      <h1>Recent Complaints</h1>
+    <div>
+      <h1 className="text-3xl font-semibold text-blue-500 text-center my-5">
+        Recent Complaints
+      </h1>
       {complaints?.length ? (
-        <ul>
-          {complaints.map((complaint, index) => (
-            <li key={index}>
-              {complaint.brand} {complaint.model}
+        <ul className="flex flex-col gap-10 items-center">
+          {complaints.map((complaint) => (
+            <li key={complaint.id} className="w-full flex justify-center">
+              <ComplaintCard
+                brand={complaint.brand}
+                model={complaint.model}
+                type={complaint.case}
+                desc={complaint.desc}
+              />
             </li>
           ))}
         </ul>
       ) : (
         <p>No complaints found.</p>
       )}
-    </section>
-  );
+    </div> );
 };
