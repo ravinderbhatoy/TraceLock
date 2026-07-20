@@ -16,7 +16,6 @@ class CitySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ComplaintSerializer(serializers.HyperlinkedModelSerializer):
-    city = serializers.ReadOnlyField(source="city.name")
     state = serializers.ReadOnlyField(source="city.state.name")
     station = serializers.ReadOnlyField(source="station.name")
 

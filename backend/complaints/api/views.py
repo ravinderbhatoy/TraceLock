@@ -41,6 +41,7 @@ class ComplaintList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         user = self.request.user
         city = serializer.validated_data.get('city')
+        print(serializer.validated_data)
         if not city:
             raise serializers.ValidationError("City is required")
         if not hasattr(city, 'station'):

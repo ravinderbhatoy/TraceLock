@@ -21,22 +21,10 @@ const SignUp = () => {
   const onSubmit = async (data) => {
     const json = JSON.stringify(data);
     try {
-      const response = await axiosClient.post("/users/auth/register/", json, {
-        headers: { "Content-Type": "application/json" },
-      });
-      console.log(response)
-      if (!response.ok){
-        const result = response.json()
-        // Map backend errors to fields
-        Object.keys(result.errors).forEach((field) => {
-          setError(field, {
-            type: "server",
-            message: result.errors[field],
-          });
-        });
-      }
+      const response = await axiosClient.post("/users/auth/register/", json);
+      console.log(response);
     } catch (error) {
-      console.error("Error signing up:", error.response.status);
+      console.error("Error signing up:", error.response.data);
     }
   };
 
@@ -52,7 +40,9 @@ const SignUp = () => {
 
   return (
     <div className="flex flex-col justify-center items-center border-2  p-4 border-gray-400 rounded-2xl shadow-lg max-w-200 mx-auto mt-10">
-      <h2 className="text-2xl font-semibold text-blue-500 text-center">Sign Up</h2>
+      <h2 className="text-2xl font-semibold text-blue-500 text-center">
+        Sign Up
+      </h2>
       <form
         className="flex w-full max-w-lg flex-col gap-4"
         onSubmit={handleSubmit(onSubmit)}

@@ -8,26 +8,28 @@ import {
 } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/context/AuthProvider";
+import { useState } from "react";
+import axiosClient from "@/api/axiosClient";
 
 const ComplaintCreatePage = () => {
   const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-  const day = today.getDate();
-
-  // 2. Format to YYYY-MM-DD
-  const maxFormattedDate = new Date(year, month, day);
-
   const {
-    register,
     handleSubmit,
+    register,
+    setValue,
     formState: { errors },
   } = useForm();
-
+  const [pickedDate, setPickedDate] = useState(null);
   const { user } = useAuth();
 
   const onSubmit = async (data) => {
     const json = JSON.stringify(data);
+    try {
+      const response = await axiosClient.post("/complaints/", json);
+      console.log(response.data);
+    } catch (error) {
+      console.log("Complaint registration errror", error.response.data);
+    }
     console.log(json);
   };
 
@@ -45,6 +47,7 @@ const ComplaintCreatePage = () => {
             <Label htmlFor="brand">Brand</Label>
           </div>
           <TextInput
+            id="brand"
             required
             {...register("brand", { required: "Brand name is required" })}
           />
@@ -55,7 +58,8 @@ const ComplaintCreatePage = () => {
             <Label htmlFor="model">Model</Label>
           </div>
           <TextInput
-            {...register("Model", { required: "Model is required" })}
+            id="model"
+            {...register("model", { required: "Model is required" })}
           />
           {errors.model && <p>{errors.model.message}</p>}
         </div>
@@ -63,7 +67,10 @@ const ComplaintCreatePage = () => {
           <div className="mb-2 block">
             <Label htmlFor="city">City</Label>
           </div>
-          <Select {...register("city", { required: "City is required" })}>
+          <Select
+            id="city"
+            {...register("city", { required: "City is required" })}
+          >
             <option key={user.city} value={user.city}>
               {user.city}
             </option>
@@ -75,6 +82,7 @@ const ComplaintCreatePage = () => {
             <Label htmlFor="desc">Description</Label>
           </div>
           <Textarea
+            id="desc"
             {...register("desc", { required: "Description is required" })}
           />
           {errors.desc && <p>{errors.desc.message}</p>}
@@ -83,21 +91,39 @@ const ComplaintCreatePage = () => {
           <div className="mb-2 block">
             <Label htmlFor="case">Complaint Type</Label>
           </div>
-          <TextInput
+          <Select
+            id="case"
             {...register("case", { required: "Complaint type is required" })}
-          />
-          {errors.case && <p>{errors.case.message}</p>}
+          >
+            <option value="S">Stolen</option>
+            <option value="L">Lost</option>
+          </Select>
+          {errors.case && (
+            <p className="text-red-500 text-sm">{errors.case.message}</p>
+          )}
         </div>
-
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="date_of_incidence"></Label>
+            <Label htmlFor="date_of_incidence">Incidence Date</Label>
           </div>
-          <Datepicker
-            maxDate={maxFormattedDate}
+          <input
+            type="hidden"
             {...register("date_of_incidence", {
-              required: "Incidence Date & time is required",
+              required: "Incidence Date is required",
             })}
+          />
+          <Datepicker
+            id="date_of_incidence"
+            value={pickedDate}
+            placeholder="Select a date"
+            maxDate={today}
+            onChange={(date) => {
+              setPickedDate(date);
+              setValue("date_of_incidence", date, {
+                shouldValidate: true,
+                shouldDirty: true,
+              });
+            }}
           />
           {errors.date_of_incidence && (
             <p>{errors.date_of_incidence.message}</p>

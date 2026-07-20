@@ -1,14 +1,14 @@
-import axios from "axios"
+import axios from "axios";
 
-const BASE_URL = "http://localhost:8000/api"
+const BASE_URL = "http://localhost:8000/api";
 
 const axiosClient = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
   headers: {
-    'Content-Type': 'application/json',
-  }
-})
+    "Content-Type": "application/json",
+  },
+});
 
 const SKIP_REFRESH_URLS = [
   "/users/me/",
@@ -56,6 +56,6 @@ axiosClient.interceptors.response.use(
     } finally {
       isRefreshing = false;
     }
-  }
+  },
 );
-export default axiosClient
+export default axiosClient;
