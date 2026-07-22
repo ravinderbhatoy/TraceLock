@@ -2,18 +2,12 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-BRAND_CHOICES = [
-    ("Apple", "Apple"),
-    ("Samsung", "Samsung"),
-    ("OnePlus", "OnePlus"),
-    ("Xiaomi", "Xiaomi"),
-    ("Google", "Google"),
-    ("Motorola", "Motorola"),
-    ("Vivo", "Vivo"),
-    ("Oppo", "Oppo"),
-    ("Realme", "Realme"),
-    ("Other", "Other")
-]
+
+class Brand(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 
 class State(models.Model):
@@ -66,7 +60,9 @@ class Complaint(models.Model):
     )
 
     model = models.CharField(max_length=100)
-    brand = models.CharField(max_length=50, choices=BRAND_CHOICES)
+    brand = models.ForeignKey(Brand, on_delete=models.SET_NULL,
+                              related_name='complaints', null=True, blank=True)
+
     desc = models.TextField()
     case = models.CharField(max_length=1, choices=CASE_CHOICES)
     date_of_incidence = models.DateTimeField(null=True,

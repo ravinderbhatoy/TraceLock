@@ -1,11 +1,12 @@
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, APIView
+from rest_framework.reverse import reverse
 from rest_framework import generics, permissions
 from rest_framework import serializers
-from complaints.models import Complaint, City
+from complaints.models import Complaint, City, Brand
 from users.api.permissions import IsOwnerOrReadOnly
-from .serializers import ComplaintSerializer, CitySerializer
-from rest_framework.reverse import reverse
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from .serializers import (ComplaintSerializer, CitySerializer,
+                          BrandSerializer)
 
 
 @api_view(['GET'])
@@ -17,6 +18,12 @@ def api_root(request, format=None):
                                   format=format)
         }
     )
+
+
+class BrandList(generics.ListAPIView):
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
+    permission_classes = [permissions.AllowAny]
 
 
 class CityList(generics.ListAPIView):

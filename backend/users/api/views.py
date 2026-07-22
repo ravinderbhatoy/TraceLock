@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.conf import settings
 
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from users.models import User, Station
 from .serializers import (UserSerializer, StationSerializer,
                           UserRegistrationSerializer)
@@ -11,6 +11,14 @@ from .serializers import (UserSerializer, StationSerializer,
 from rest_framework_simplejwt.views import (
     TokenObtainPairView, TokenRefreshView
 )
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
+
+
+@ensure_csrf_cookie
+def csrf(request):
+    return JsonResponse({"detail": "CSRF cookie set"})
 
 
 class CustomRefreshTokenView(TokenRefreshView):
@@ -98,7 +106,7 @@ class LogoutView(APIView):
                 pass  # Token already expired or invalid
 
         # Clear cookies
-        response = Response({'detail': 'Successfully logged out.'})
+        response = Response({'detail': 'Successfully logged out.'}, status=status.HTTP_200_OK)
         response.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])
         response.delete_cookie(settings.SIMPLE_JWT['REFRESH_COOKIE'])
 

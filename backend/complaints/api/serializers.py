@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from complaints.models import Complaint, City
+from complaints.models import Complaint, City, Brand
+
+
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = '__all__'
 
 
 class CitySerializer(serializers.HyperlinkedModelSerializer):
@@ -15,9 +21,18 @@ class CitySerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
-class ComplaintSerializer(serializers.HyperlinkedModelSerializer):
+class ComplaintSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name="complaint-detail")
     state = serializers.ReadOnlyField(source="city.state.name")
     station = serializers.ReadOnlyField(source="station.name")
+
+    # Writable field for POST/PUT (accepts integer ID)
+    brand = serializers.PrimaryKeyRelatedField(queryset=Brand.objects.all(), write_only=True)
+    # Read-only representation for GET requests
+    brand_name = serializers.ReadOnlyField(source="brand.name")
+
+    city = serializers.PrimaryKeyRelatedField(write_only=True, queryset=City.objects.all())
+    city_name = serializers.ReadOnlyField(source='city.name')
 
     class Meta:
         model = Complaint
@@ -26,8 +41,10 @@ class ComplaintSerializer(serializers.HyperlinkedModelSerializer):
             "filed_by",
             "model",
             "brand",
+            "brand_name",
             "case",
             "city",
+            "city_name",
             "state",
             "date_of_incidence",
             "desc",

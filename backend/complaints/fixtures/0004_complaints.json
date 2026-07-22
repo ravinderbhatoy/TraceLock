@@ -4,7 +4,7 @@
     "fields": {
       "filed_by": 2,
       "model": "Note 10 Pro",
-      "brand": "Redmi",
+      "brand": 4,
       "desc": "Phone stolen while travelling on a city bus.",
       "case": "S",
       "city": 1,
@@ -16,8 +16,8 @@
     "fields": {
       "filed_by": 2,
       "model": "Galaxy S23",
+      "brand": 1,
       "city": 2,
-      "brand": "Samsung",
       "desc": "Phone lost during shopping at the local market.",
       "case": "L",
       "filed_at": "2026-06-18T16:45:00Z"
@@ -28,7 +28,7 @@
     "fields": {
       "filed_by": 2,
       "model": "iPhone 14",
-      "brand": "Apple",
+      "brand": 2,
       "city": 4,
       "desc": "Phone snatched by two people on a motorcycle.",
       "case": "S",
@@ -40,7 +40,7 @@
     "fields": {
       "filed_by": 2,
       "model": "Nord CE 4",
-      "brand": "OnePlus",
+      "brand": 7,
       "city": 4,
       "desc": "Phone left in an auto-rickshaw and could not be recovered.",
       "case": "L",
@@ -52,9 +52,9 @@
     "fields": {
       "filed_by": 2,
       "model": "Pixel 8",
-      "brand": "Google",
-      "desc": "Phone stolen from office desk during lunch break.",
+      "brand": 8,
       "city": 5,
+      "desc": "Phone stolen from office desk during lunch break.",
       "case": "S",
       "filed_at": "2026-06-10T13:00:00Z"
     }
@@ -64,9 +64,9 @@
     "fields": {
       "filed_by": 1,
       "model": "Moto G84",
-      "brand": "Motorola",
-      "desc": "Phone misplaced at a restaurant.",
+      "brand": 5,
       "city": 5,
+      "desc": "Phone misplaced at a restaurant.",
       "case": "L",
       "filed_at": "2026-06-08T19:10:00Z"
     }
@@ -76,11 +76,10 @@
     "fields": {
       "filed_by": 1,
       "model": "Realme GT 6",
-      "brand": "Realme",
-      "desc": "Phone stolen during a crowded festival.",
+      "brand": 6,
       "city": 3,
+      "desc": "Phone stolen during a crowded festival.",
       "case": "S",
-      "desc": "Phone forgotten in a taxi.",
       "filed_at": "2026-06-05T18:40:00Z"
     }
   },
@@ -89,9 +88,9 @@
     "fields": {
       "filed_by": 1,
       "model": "V50",
-      "brand": "Vivo",
-      "desc": "Phone forgotten in a taxi.",
+      "brand": 9,
       "city": 3,
+      "desc": "Phone forgotten in a taxi.",
       "case": "L",
       "filed_at": "2026-06-03T11:30:00Z"
     }
@@ -101,7 +100,7 @@
     "fields": {
       "filed_by": 1,
       "model": "Xiaomi 14",
-      "brand": "Xiaomi",
+      "brand": 10,
       "city": 3,
       "desc": "Phone stolen from backpack while commuting.",
       "case": "S",
@@ -113,7 +112,7 @@
     "fields": {
       "filed_by": 1,
       "model": "Nothing Phone (3)",
-      "brand": "Nothing",
+      "brand": 11,
       "city": 5,
       "desc": "Phone lost during a college event.",
       "case": "L",

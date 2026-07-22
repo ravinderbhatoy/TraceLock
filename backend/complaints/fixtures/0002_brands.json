@@ -1,0 +1,57 @@
+[
+    {
+        "model": "complaints.brand",
+        "pk": 1,
+        "fields": {"name": "Samsung"}
+    },
+    {
+        "model": "complaints.brand",
+        "pk": 2,
+        "fields": {"name": "Apple"}
+    },
+    {
+        "model": "complaints.brand",
+        "pk": 3,
+        "fields": {"name": "Nokia"}
+    },
+    {
+        "model": "complaints.brand",
+        "pk": 4,
+        "fields": {"name": "Redmi"}
+    },
+    {
+        "model": "complaints.brand",
+        "pk": 5,
+        "fields": {"name": "Motorola"}
+    },
+    {
+        "model": "complaints.brand",
+        "pk": 6,
+        "fields": {"name": "Realme"}
+    },
+    {
+        "model": "complaints.brand",
+        "pk": 7,
+        "fields": {"name": "OnePlus"}
+    },
+    {
+        "model": "complaints.brand",
+        "pk": 8,
+        "fields": {"name": "Google"}
+    },
+    {
+        "model": "complaints.brand",
+        "pk": 9,
+        "fields": {"name": "Vivo"}
+    },
+    {
+        "model": "complaints.brand",
+        "pk": 10,
+        "fields": {"name": "Xiaomi"}
+    },
+    {
+        "model": "complaints.brand",
+        "pk": 11,
+        "fields": {"name": "Nothing"}
+    }
+]

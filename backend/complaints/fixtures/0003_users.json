@@ -1,0 +1,10 @@
+[
+  {
+      "model": "users.user",
+      "pk": 3,
+      "fields": {
+        "state": 5, 
+        "name": "Bathinda"
+      }
+  }
+]
