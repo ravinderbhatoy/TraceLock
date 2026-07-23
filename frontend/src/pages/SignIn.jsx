@@ -8,9 +8,10 @@ const SignIn = () => {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors, isSubmitSuccessful },
   } = useForm({
-    defaultValues: {username: "", password: ""}
+    defaultValues: { username: "", password: "" }
   });
 
   const { login, navigate } = useAuth();
@@ -20,13 +21,25 @@ const SignIn = () => {
       await login(data.username, data.password);
       navigate("/profile");
     } catch (error) {
-      console.log(error)
-      alert("Login Failed");
+      if (error.response && error.response.data) {
+        const serverErrors = error.response.data;
+        Object.keys(serverErrors).forEach((field) => {
+          const message = Array.isArray(serverErrors[field]) ?
+            serverErrors[field].join(" ") : serverErrors[field]
+          // Handle general/non-field errors separately using 'root'
+          if (field === "non_field_errors" || field === "detail") {
+            setError("root", { type: "server", message });
+          } else {
+            // Set field-level error (e.g. username, email, password1)
+            setError(field, { type: "server", message });
+          }
+        })
+      }
     }
   };
 
   useEffect(() => {
-    if (isSubmitSuccessful){
+    if (isSubmitSuccessful) {
       reset()
     }
   }, [isSubmitSuccessful, reset])

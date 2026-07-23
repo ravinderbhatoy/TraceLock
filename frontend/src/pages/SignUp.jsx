@@ -9,12 +9,14 @@ import {
   Select,
 } from "flowbite-react";
 import axiosClient from "../api/axiosClient";
+import ErrorMessage from "@/components/ErrorMessage";
 
 const SignUp = () => {
   const [cities, setCities] = useState([]);
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm();
 
@@ -22,9 +24,22 @@ const SignUp = () => {
     const json = JSON.stringify(data);
     try {
       const response = await axiosClient.post("/users/auth/register/", json);
-      console.log(response);
     } catch (error) {
-      console.error("Error signing up:", error.response.data);
+      console.log(error.response.data)
+      if (error.response && error.response.data) {
+        const serverErrors = error.response.data;
+        Object.keys(serverErrors).forEach((field) => {
+          const message = Array.isArray(serverErrors[field]) ?
+            serverErrors[field].join(" ") : serverErrors[field]
+          // Handle general/non-field errors separately using 'root'
+          if (field === "non_field_errors" || field === "detail") {
+            setError("root", { type: "server", message });
+          } else {
+            // Set field-level error (e.g. username, email, password1)
+            setError(field, { type: "server", message });
+          }
+        })
+      }
     }
   };
 
@@ -53,7 +68,7 @@ const SignUp = () => {
             required
             {...register("first_name", { required: "first name is required" })}
           />
-          {errors.first_name && <p>{errors.first_name.message}</p>}
+          {errors.first_name && <ErrorMessage message={errors.first_name.message} />}
         </div>
         <div>
           <div className="mb-2 block">
@@ -62,7 +77,7 @@ const SignUp = () => {
           <TextInput
             {...register("last_name", { required: "last name is required" })}
           />
-          {errors.last_name && <p>{errors.last_name.message}</p>}
+          {errors.last_name && <ErrorMessage message={errors.last_name.message} />}
         </div>
         <div>
           <div className="mb-2 block">
@@ -76,7 +91,7 @@ const SignUp = () => {
               </option>
             ))}
           </Select>
-          {errors.city && <p>{errors.city.message}</p>}
+          {errors.city && <ErrorMessage message={errors.city.message} />}
         </div>
         <div>
           <div className="mb-2 block">
@@ -94,7 +109,7 @@ const SignUp = () => {
           <TextInput
             {...register("username", { required: "Username is required" })}
           />
-          {errors.username && <p>{errors.username.message}</p>}
+          {errors.username && <ErrorMessage message={errors.username.message} />}
         </div>
 
         <div>
@@ -105,7 +120,7 @@ const SignUp = () => {
             type="email"
             {...register("email", { required: "Email is required" })}
           />
-          {errors.email && <p>{errors.email.message}</p>}
+          {errors.email && <errormessage message={errors.email.message} />}
         </div>
         <div>
           <div className="mb-2 block">
@@ -115,7 +130,7 @@ const SignUp = () => {
             type="password"
             {...register("password1", { required: "Password is required" })}
           />
-          {errors.password1 && <p>{errors.password1.message}</p>}
+          {errors.password1 && <ErrorMessage message={errors.password1.message} />}
         </div>
         <div>
           <div className="mb-2 block">
@@ -127,7 +142,7 @@ const SignUp = () => {
               required: "Please confirm your password",
             })}
           />
-          {errors.password2 && <p>{errors.password2.message}</p>}
+          {errors.password2 && <ErrorMessage message={errors.password2.message} />}
         </div>
         <div className="flex items-center gap-2">
           <Checkbox id="remember" />

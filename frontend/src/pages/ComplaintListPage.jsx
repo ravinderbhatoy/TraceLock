@@ -17,7 +17,7 @@ export const ComplaintListPage = () => {
           setComplaints(response.data.results);
         }
       } catch (err) {
-        if (error.response){
+        if (error.response) {
           if (error.response.status == 401) {
             await logout()
           }
@@ -39,12 +39,14 @@ export const ComplaintListPage = () => {
       {complaints?.length ? (
         <ul className="flex flex-col gap-10 items-center">
           {complaints.map((complaint) => (
-            <li key={complaint.id} className="w-full flex justify-center">
+            <li key={complaint.pk} className="w-full flex justify-center">
               <ComplaintCard
                 brand={complaint.brand}
                 model={complaint.model}
                 type={complaint.case}
                 desc={complaint.desc}
+                pk={complaint.pk}
+                showDetails={true}
               />
             </li>
           ))}
@@ -52,5 +54,7 @@ export const ComplaintListPage = () => {
       ) : (
         <p>No complaints found.</p>
       )}
-    </div> );
+    </div>);
 };
+
+export default ComplaintListPage;

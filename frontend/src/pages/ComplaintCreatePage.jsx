@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import axiosClient from "@/api/axiosClient";
 import { useAuth } from "@/context/AuthProvider";
+import ErrorMessage from "@/components/ErrorMessage";
 
 
 const ComplaintCreatePage = () => {
@@ -19,6 +20,7 @@ const ComplaintCreatePage = () => {
     handleSubmit,
     register,
     setValue,
+    setError,
     formState: { errors },
   } = useForm();
 
@@ -31,19 +33,31 @@ const ComplaintCreatePage = () => {
     const json = JSON.stringify(data);
     try {
       const response = await axiosClient.post("/complaints/", json);
-      if (response.status.ok) {
-        console.log("Success", response)
+      if (response.status === 201) {
         navigate('/complaints')
       }
     } catch (error) {
       console.log("Complaint registration errror", error.response.data);
+      if (error.response && error.response.data) {
+        const serverErrors = error.response.data;
+        Object.keys(serverErrors).forEach((field) => {
+          const message = Array.isArray(serverErrors[field]) ?
+            serverErrors[field].join(" ") : serverErrors[field]
+          // Handle general/non-field errors separately using 'root'
+          if (field === "non_field_errors" || field === "detail") {
+            setError("root", { type: "server", message });
+          } else {
+            // Set field-level error (e.g. username, email, password1)
+            setError(field, { type: "server", message });
+          }
+        })
+      }
     }
   };
 
   useEffect(() => {
     const fetchBrands = async () => {
       const response = await axiosClient.get("/complaints/brands/");
-      console.log(response);
       setBrands(response.data.results);
     };
     const fetchCities = async () => {
@@ -77,7 +91,9 @@ const ComplaintCreatePage = () => {
               </option>
             ))}
           </Select>
-          {errors.brand && <p>{errors.brand.message}</p>}
+          {errors.brand && (
+            <ErrorMessage message={errors.brand.message} />
+          )}
         </div>
         <div>
           <div className="mb-2 block">
@@ -87,7 +103,9 @@ const ComplaintCreatePage = () => {
             id="model"
             {...register("model", { required: "Model is required" })}
           />
-          {errors.model && <p>{errors.model.message}</p>}
+          {errors.model && (
+            <ErrorMessage message={errors.model.message} />
+          )}
         </div>
         <div>
           <div className="mb-2 block">
@@ -101,7 +119,9 @@ const ComplaintCreatePage = () => {
               </option>
             ))}
           </Select>
-          {errors.city && <p>{errors.city.message}</p>}
+          {errors.city && (
+            <ErrorMessage message={errors.city.message} />
+          )}
         </div>
         <div>
           <div className="mb-2 block">
@@ -111,7 +131,9 @@ const ComplaintCreatePage = () => {
             id="desc"
             {...register("desc", { required: "Description is required" })}
           />
-          {errors.desc && <p>{errors.desc.message}</p>}
+          {errors.desc && (
+            <ErrorMessage message={errors.desc.message} />
+          )}
         </div>
         <div>
           <div className="mb-2 block">
@@ -125,7 +147,7 @@ const ComplaintCreatePage = () => {
             <option value="L">Lost</option>
           </Select>
           {errors.case && (
-            <p className="text-red-500 text-sm">{errors.case.message}</p>
+            <ErrorMessage message={errors.case.message} />
           )}
         </div>
         <div>
@@ -152,7 +174,7 @@ const ComplaintCreatePage = () => {
             }}
           />
           {errors.date_of_incidence && (
-            <p>{errors.date_of_incidence.message}</p>
+            <ErrorMessage message={errors.date_of_incidence.message} />
           )}
         </div>
         <Button type="submit">Submit</Button>
