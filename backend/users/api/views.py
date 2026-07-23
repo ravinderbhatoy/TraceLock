@@ -1,20 +1,19 @@
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import APIView
 from django.conf import settings
+from django.contrib.auth import authenticate
 from django.middleware.csrf import get_token
 
 from rest_framework import generics, permissions, status
 from users.models import User, Station
 from .serializers import (UserSerializer, StationSerializer,
-                          UserRegistrationSerializer)
+                          UserRegistrationSerializer, LoginSerializer)
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView, TokenRefreshView
 )
-
-from django.http import JsonResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
 
 
 class CSRFAPIView(APIView):
@@ -114,6 +113,30 @@ class LogoutView(APIView):
         response.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])
         response.delete_cookie(settings.SIMPLE_JWT['REFRESH_COOKIE'])
 
+        return response
+
+
+class UserLoginView(APIView):
+    serializer_class = LoginSerializer
+    authentication_classes = ()
+    permission_classes = ()
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        username = serializer.validated_data["username"]
+        password = serializer.validated_data["password"]
+        user = authenticate(request, username=username, password=password)
+
+        if not user:
+            raise AuthenticationFailed
+
+        response = Response({}, status=status.HTTP_200_OK)
+
+# Set auth cookies
+        refresh = RefreshToken.for_user(user)
+        CustomTokenObtainPairView(response, str(refresh.access_token), str(refresh))
         return response
 
 

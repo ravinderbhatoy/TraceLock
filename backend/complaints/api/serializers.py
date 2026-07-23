@@ -37,6 +37,7 @@ class ComplaintSerializer(serializers.ModelSerializer):
     class Meta:
         model = Complaint
         fields = [
+            "pk",
             "url",  # links view(complaint-detail) automatically
             "filed_by",
             "model",

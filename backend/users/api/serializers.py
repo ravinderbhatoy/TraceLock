@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from users.models import User, Station
 from django.contrib.auth.password_validation import validate_password
+from rest_framework_simplejwt.serializers import PasswordField
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -20,6 +21,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "state",
             "address",
         ]
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = PasswordField()
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):

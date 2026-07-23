@@ -27,5 +27,6 @@ Day 2: Use refresh_token_A → get new access token + refresh_token_B
 Day 3: Use refresh_token_B → get new access token + refresh_token_C
         refresh_token_B is now BLACKLISTED
 
-
+## JWT Authentication HttpOnly
+[JWT Authentication](https://ghoveoud.ir/posts/securing-django-rest-jwt-httponly-cookie-part-1/#what-is-jwt)
 
