@@ -19,13 +19,12 @@ from rest_framework_simplejwt.views import (
 )
 from django.contrib import admin
 from django.urls import path, include
-from users.api.views import csrf
 from users.api.views import (CustomTokenObtainPairView,
-                             CustomRefreshTokenView)
+                             CustomRefreshTokenView, CSRFAPIView)
 
 urlpatterns = [
     path('', include("complaints.urls")),
-    path("api/csrf/", csrf),
+    path("api/csrf/", CSRFAPIView.as_view(), name='csrf-token'),
     path('admin/', admin.site.urls),
     path('users/', include("users.urls")),
     path('api/users/', include('users.api.urls')),

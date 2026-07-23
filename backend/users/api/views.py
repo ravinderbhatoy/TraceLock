@@ -2,6 +2,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.conf import settings
+from django.middleware.csrf import get_token
 
 from rest_framework import generics, permissions, status
 from users.models import User, Station
@@ -16,9 +17,12 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 
-@ensure_csrf_cookie
-def csrf(request):
-    return JsonResponse({"detail": "CSRF cookie set"})
+class CSRFAPIView(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+
+    def get(self, request):
+        return Response({"token": get_token(request)})
 
 
 class CustomRefreshTokenView(TokenRefreshView):

@@ -52,6 +52,7 @@ class ComplaintSerializer(serializers.ModelSerializer):
             "station",
             "status",
         ]
+        read_only_fields = ["filed_by", "station"]
 
 # from documentation
 # Our snippet and user serializers include 'url' fields that by default

@@ -26,6 +26,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        const csrfResponse = await axiosClient.get("/csrf/");
+        console.log(csrfResponse);
+
         const response = await axiosClient.get("/users/me/"); // your user info endpoint
         console.log("User data fetch", response.data);
         setUser(response.data);

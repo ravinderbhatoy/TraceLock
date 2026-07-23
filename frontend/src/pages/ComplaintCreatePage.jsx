@@ -6,10 +6,12 @@ import {
   Select,
   Datepicker,
 } from "flowbite-react";
+
 import { useForm } from "react-hook-form";
-import { useAuth } from "@/context/AuthProvider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axiosClient from "@/api/axiosClient";
+import { useAuth } from "@/context/AuthProvider";
+
 
 const ComplaintCreatePage = () => {
   const today = new Date();
@@ -19,19 +21,38 @@ const ComplaintCreatePage = () => {
     setValue,
     formState: { errors },
   } = useForm();
+
   const [pickedDate, setPickedDate] = useState(null);
-  const { user } = useAuth();
+  const [brands, setBrands] = useState(null);
+  const [cities, setCities] = useState([]);
+  const { navigate } = useAuth()
 
   const onSubmit = async (data) => {
     const json = JSON.stringify(data);
     try {
       const response = await axiosClient.post("/complaints/", json);
-      console.log(response.data);
+      if (response.status.ok) {
+        console.log("Success", response)
+        navigate('/complaints')
+      }
     } catch (error) {
       console.log("Complaint registration errror", error.response.data);
     }
-    console.log(json);
   };
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      const response = await axiosClient.get("/complaints/brands/");
+      console.log(response);
+      setBrands(response.data.results);
+    };
+    const fetchCities = async () => {
+      const response = await axiosClient.get("/complaints/cities/");
+      setCities(response.data.results);
+    };
+    fetchBrands();
+    fetchCities();
+  }, []);
 
   return (
     <div className="flex flex-col justify-center items-center border-2  p-4 border-gray-400 rounded-2xl shadow-lg max-w-200 mx-auto mt-10">
@@ -44,13 +65,18 @@ const ComplaintCreatePage = () => {
       >
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="brand">Brand</Label>
+            <Label htmlFor="brand">Brand Name</Label>
           </div>
-          <TextInput
-            id="brand"
-            required
+          <Select
             {...register("brand", { required: "Brand name is required" })}
-          />
+          >
+            <option value="">Select brand name</option>
+            {brands?.map((brand) => (
+              <option key={brand.id} value={brand.id}>
+                {brand.name}
+              </option>
+            ))}
+          </Select>
           {errors.brand && <p>{errors.brand.message}</p>}
         </div>
         <div>
@@ -67,13 +93,13 @@ const ComplaintCreatePage = () => {
           <div className="mb-2 block">
             <Label htmlFor="city">City</Label>
           </div>
-          <Select
-            id="city"
-            {...register("city", { required: "City is required" })}
-          >
-            <option key={user.city} value={user.city}>
-              {user.city}
-            </option>
+          <Select {...register("city", { required: "City is required" })}>
+            <option value="">Select a city</option>
+            {cities.map((city) => (
+              <option key={city.id} value={city.id}>
+                {city.name}
+              </option>
+            ))}
           </Select>
           {errors.city && <p>{errors.city.message}</p>}
         </div>

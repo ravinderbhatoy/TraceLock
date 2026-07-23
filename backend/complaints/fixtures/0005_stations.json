@@ -1,0 +1,22 @@
+[
+    {
+        "model": "users.station",
+        "pk": 1,
+        "fields": {
+          "name": "Ludhiana East",
+          "user": 1,
+          "city": 1,
+          "address": "Near Vardhman mil chandigarh Road"
+        }
+    },
+    {
+        "model": "users.station",
+        "pk": 2,
+        "fields": {
+          "name": "Jalandhar Main",
+          "user": 2,
+          "city": 2,
+          "address": "At the horizon of great restruant Haveli!"
+        }
+    }
+]
