@@ -2,17 +2,15 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthProvider";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { useEffect } from "react";
+import ErrorMessage from "@/components/ErrorMessage";
 
 const SignIn = () => {
   const {
     register,
     handleSubmit,
-    reset,
     setError,
-    formState: { errors, isSubmitSuccessful },
-  } = useForm({
-    defaultValues: { username: "", password: "" }
-  });
+    formState: { errors },
+  } = useForm();
 
   const { login, navigate } = useAuth();
 
@@ -38,12 +36,6 @@ const SignIn = () => {
     }
   };
 
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset()
-    }
-  }, [isSubmitSuccessful, reset])
-
   return (
     <section className="flex flex-col justify-center items-center border-2 m-12 p-8 border-gray-400 rounded-2xl max-w-200 mx-auto mt-10">
       <h2 className="text-2xl font-semibold text-blue-500 text-center">Sign In</h2>
@@ -58,7 +50,7 @@ const SignIn = () => {
           <TextInput
             {...register("username", { required: "Username is required" })}
           />
-          {errors.username && <p>{errors.username.message}</p>}
+          {errors.username && <ErrorMessage message={errors.username.message} />}
         </div>
         <div>
           <div className="mb-2 block">
@@ -68,12 +60,13 @@ const SignIn = () => {
             type="password"
             {...register("password", { required: "Password is required" })}
           />
-          {errors.password && <p>{errors.password.message}</p>}
+          {errors.password && <ErrorMessage message={errors.password.message} />}
         </div>
         <div className="flex items-center gap-2">
           <Checkbox id="remember" />
           <Label htmlFor="remember">Remember me</Label>
         </div>
+        {errors.root && <ErrorMessage message={errors.root.message} />}
         <Button type="submit">Submit</Button>
       </form>
     </section>

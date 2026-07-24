@@ -9,14 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 
 export function NavbarComponent() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = async (event) => {
-    event.preventDefault();
-    await logout();
-    navigate("/");
-  };
+  const { user } = useAuth();
 
   return (
     <Navbar fluid rounded>
@@ -38,10 +31,7 @@ export function NavbarComponent() {
         {user ? (
           <>
             <NavbarLink as={Link} to="/profile">
-              Profile
-            </NavbarLink>
-            <NavbarLink href="/" onClick={handleLogout}>
-              Logout
+              {user.username}
             </NavbarLink>
           </>
         ) : (

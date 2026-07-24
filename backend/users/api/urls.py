@@ -8,7 +8,6 @@ urlpatterns = [
     path("stations/", views.StationList.as_view(), name='station-list'),
     path("stations/<int:pk>/", views.StationDetail.as_view(), name='station-detail'),
     path("auth/", include('rest_framework.urls')),
-    path('auth/register/', views.UserRegistrationView.as_view(), name='register'),
-    path('auth/login/', views.UserLoginView.as_view(), name='login'),
+    path('register/', views.UserRegistrationView.as_view(), name='register'),
     path("logout/", views.LogoutView.as_view(), name="logout")
 ]

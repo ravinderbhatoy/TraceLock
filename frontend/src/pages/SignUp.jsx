@@ -23,9 +23,8 @@ const SignUp = () => {
   const onSubmit = async (data) => {
     const json = JSON.stringify(data);
     try {
-      const response = await axiosClient.post("/users/auth/register/", json);
+      const response = await axiosClient.post("/users/register/", json);
     } catch (error) {
-      console.log(error.response.data)
       if (error.response && error.response.data) {
         const serverErrors = error.response.data;
         Object.keys(serverErrors).forEach((field) => {

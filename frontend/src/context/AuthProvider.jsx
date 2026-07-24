@@ -14,9 +14,10 @@ export const AuthProvider = ({ children }) => {
       return;
     }
     try {
-      await axiosClient.post("/users/logout/");
+      const response = await axiosClient.post("/users/logout/");
+      console.log(response.data)
     } catch (error) {
-      console.error("Logout failed:", error.response);
+      console.error("Logout failed:", error.response.data);
     } finally {
       setUser(null);
     }
@@ -53,6 +54,7 @@ export const AuthProvider = ({ children }) => {
       navigate("/profile");
     } catch (error) {
       console.log("Error while login.", error.response);
+      throw error; // <-- re-throw so the form's catch still runs
     }
   };
 

@@ -58,6 +58,17 @@ class ComplaintList(generics.ListCreateAPIView):
                         station=city.station)
 
 
+class UserComplaintList(generics.ListAPIView):
+    serializer_class = ComplaintSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Complaint.objects.filter(filed_by=user)
+
+        return queryset
+
+
 class ComplaintDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Complaint.objects.all()
     serializer_class = ComplaintSerializer

@@ -114,28 +114,6 @@ class LogoutView(APIView):
         return response
 
 
-class UserLoginView(APIView):
-    serializer_class = LoginSerializer
-    authentication_classes = ()
-    permission_classes = ()
-
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        username = serializer.validated_data["username"]
-        password = serializer.validated_data["password"]
-        user = authenticate(request, username=username, password=password)
-
-        if not user:
-            raise AuthenticationFailed
-
-        refresh = RefreshToken.for_user(user)
-        response = Response({}, status=status.HTTP_200_OK)
-        set_jwt_cookies(response, str(refresh.access_token), str(refresh))
-        return response
-
-
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer
     # anyone can register — no auth required to hit this endpoint
