@@ -6,122 +6,178 @@ A full-stack web platform for reporting and tracking stolen or lost devices. Bui
 
 ## Features
 
-- File complaints for stolen or lost devices
+- File and manage complaints for stolen or lost devices
 - Auto-assigns the nearest police station based on the complaint's city
-- Public device lookup — anyone can browse complaints without an account
-- JWT-based authentication for filing and managing complaints
+- Public device lookup — search and browse complaints by city or brand
+- User registration and account management
+- JWT & HTTP-Only Cookie-based authentication
 - Owner-only complaint editing and deletion
+- User dashboard for managing personal complaints
 - Admin panel for full complaint and user management
 
 ---
 
 ## Tech Stack
 
-- **Backend:** Django, Django REST Framework
-- **Auth:** `djangorestframework-simplejwt`
+### Backend
+- **Framework:** Django 6.0+, Django REST Framework
+- **Auth:** `djangorestframework-simplejwt` (HTTP-Only Cookie support)
+- **CORS:** `django-cors-headers`
 - **Database:** SQLite (development)
 - **Package Manager:** `uv`
+
+### Frontend
+- **Framework:** React 19, Vite
+- **Routing:** React Router v7
+- **Styling & UI:** Tailwind CSS v4, Flowbite React, `@base-ui/react`, `@fontsource-variable/geist`
+- **Form & Validation:** React Hook Form, Zod
+- **HTTP Client:** Axios
+- **Package Manager:** `npm`
 
 ---
 
 ## Project Structure
 
 ```
-tracelock/          # Django project settings
-complaints/         # Complaint models, views, serializers, API
-users/              # Custom user model, station, city, state models, API
+TraceLock/
+├── backend/                 # Django backend application
+│   ├── complaints/          # Complaints app (models, API views, serializers)
+│   ├── users/               # Custom user model, stations, auth & registration API
+│   ├── tracelock/           # Django project configuration & settings
+│   ├── pyproject.toml       # Python package & dependency specifications (uv)
+│   └── manage.py
+├── frontend/                # React frontend application
+│   ├── src/                 # React components, pages, routing, assets
+│   ├── package.json         # Node.js dependencies and scripts
+│   └── vite.config.js       # Vite configuration
+└── README.md                # Project documentation
 ```
 
 ---
 
-## Setup
+## Setup & Installation
 
 ### Prerequisites
 
 - Python 3.14+
-- `uv`
+- `uv` (Python package installer)
+- Node.js 18+ and `npm`
 
-### Installation
+---
 
-```bash
-git clone https://github.com/ravinderbhatoy/tracelock.git
-cd tracelock
+### Backend Setup
 
-uv sync
-```
+1. **Navigate to the backend directory:**
+   ```bash
+   cd backend
+   ```
 
-### Database
+2. **Install dependencies:**
+   ```bash
+   uv sync
+   ```
 
-```bash
-uv run manage.py migrate
-```
+3. **Run database migrations:**
+   ```bash
+   uv run manage.py migrate
+   ```
 
-### Seed Data
+4. **Load seed data (location and complaints fixtures):**
+   ```bash
+   uv run manage.py loaddata locations
+   uv run manage.py loaddata complaints
+   ```
 
-Load location and complaint fixtures:
+5. **Start the backend development server:**
+   ```bash
+   uv run manage.py runserver
+   ```
+   The API will be available at `http://127.0.0.1:8000/`.
 
-```bash
-uv run manage.py loaddata locations
-uv run manage.py loaddata complaints
-```
+---
 
-### Run
+### Frontend Setup
 
-```bash
-uv run manage.py runserver
-```
+1. **Navigate to the frontend directory:**
+   ```bash
+   cd frontend
+   ```
+
+2. **Install Node dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Start the frontend development server:**
+   ```bash
+   npm run dev
+   ```
+   The web application will be available at `http://localhost:5173/`.
 
 ---
 
 ## API Endpoints
 
-### Auth
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/token/` | Obtain access + refresh tokens |
-| POST | `/api/token/refresh/` | Refresh access token |
-
-### Users
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/users/` | List users |
-| GET | `/api/users/{id}/` | User detail |
-
-### Complaints
+### Auth & Security
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| GET | `/api/complaints/` | List all complaints | No |
-| GET | `/api/complaints/{id}/` | Complaint detail | No |
-| POST | `/api/complaints/` | File a complaint | Yes |
-| PUT/PATCH | `/api/complaints/{id}/` | Update complaint | Owner only |
+| GET | `/api/csrf/` | Obtain CSRF token | No |
+| POST | `/api/token/` | Obtain access & refresh tokens (sets HTTP-only cookies) | No |
+| POST | `/api/token/refresh/` | Refresh access token using refresh cookie | No |
+| POST | `/api/users/register/` | Register a new user account | No |
+| POST | `/api/users/logout/` | Logout user and clear JWT cookies | No |
+
+### Users & Stations
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/users/` | List all users | No |
+| GET | `/api/users/{id}/` | Get user details by ID | No |
+| GET | `/api/users/me/` | Get authenticated user profile | Yes |
+| GET | `/api/users/stations/` | List all police stations | No |
+| GET | `/api/users/stations/{id}/` | Get police station detail by ID | No |
+
+### Complaints & Reference Data
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/complaints/` | List complaints (filter by city with `?city=`) | No |
+| GET | `/api/complaints/{id}/` | Get complaint detail | No |
+| POST | `/api/complaints/` | File a new complaint | Yes |
+| PUT / PATCH | `/api/complaints/{id}/` | Update complaint details | Owner only |
 | DELETE | `/api/complaints/{id}/` | Delete complaint | Owner only |
+| GET | `/api/complaints/profile/` | List complaints filed by current user | Yes |
+| GET | `/api/complaints/cities/` | List available cities | No |
+| GET | `/api/complaints/city/{id}/` | Get city details | No |
+| GET | `/api/complaints/brands/` | List device brands | No |
 
 ---
 
 ## Complaint Fields
 
-Fields the user provides when filing a complaint:
+### User-Provided Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `model` | String | Device model name (e.g. iPhone 15 Pro) |
+| `brand` | Integer (ID) | Foreign key reference to device Brand |
+| `case` | String | `'S'` for Stolen, `'L'` for Lost |
+| `city` | Integer (ID) | Foreign key reference to City where incident occurred |
+| `date_of_incidence` | DateTime | Date/time of incident (cannot be a future date) |
+| `desc` | Text | Description of the incident |
+
+### Auto-Set & Administrative Fields
 
 | Field | Description |
 |-------|-------------|
-| `model` | Device model name |
-| `brand` | Device brand |
-| `case` | `S` for Stolen, `L` for Lost |
-| `city` | City where the incident occurred |
-| `date_of_incidence` | Date of incident (cannot be a future date) |
-| `desc` | Description of the incident |
-
-Fields that are auto-set:
-
-| Field | Description |
-|-------|-------------|
-| `filed_by` | Logged-in user |
-| `station` | Auto-assigned based on complaint city |
-| `status` | Defaults to `filed` |
-| `filed_at` | Timestamp of filing |
+| `filed_by` | Logged-in user who submitted the complaint |
+| `station` | Auto-assigned police station based on the complaint's city |
+| `status` | Current status (defaults to `'filed'`) |
+| `filed_at` | Timestamp when complaint was submitted |
+| `rejection_reason` | Optional reason provided if complaint status is `'rejected'` |
+| `verified_at` | Timestamp when complaint was verified |
+| `resolved_at` | Timestamp when complaint was resolved |
 
 ---
 
@@ -129,23 +185,24 @@ Fields that are auto-set:
 
 ```
 filed → pending_verification → verified → under_investigation → resolved → closed
-                                        ↘ rejected
+                                       ↘ rejected
 ```
 
 ---
 
-## Authentication
+## Authentication Mechanism
 
-TraceLock uses JWT. Include the access token in the `Authorization` header:
+TraceLock uses JWT authentication supported by HTTP-Only secure cookies (`AUTH_COOKIE` and `REFRESH_COOKIE`) as well as standard Bearer headers for API access:
 
 ```
 Authorization: Bearer <access_token>
 ```
 
-Tokens expire after 5 minutes by default. Use `/api/token/refresh/` with your refresh token to get a new access token.
+Tokens automatically refresh or expire based on server JWT configuration.
 
 ---
 
 ## License
 
 MIT
+

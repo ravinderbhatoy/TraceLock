@@ -1,16 +1,48 @@
-# React + Vite
+# TraceLock - Frontend Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The web frontend for TraceLock, built with React 19, Vite, and Tailwind CSS.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Public Device Search:** Browse and search stolen/lost device complaints.
+- **Complaint Filing:** User-friendly forms for reporting stolen or lost devices.
+- **User Authentication:** Login, registration, and session handling using JWT / HTTP-only cookies.
+- **Dashboard:** Personal dashboard to view and track status of user-submitted complaints.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Framework:** [React 19](https://react.dev/) + [Vite](https://vitejs.dev/)
+- **Routing:** [React Router v7](https://reactrouter.com/)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
+- **UI Components:** [Flowbite React](https://flowbite-react.com/) & Base UI
+- **Form Handling:** [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
+- **HTTP Client:** [Axios](https://axios-http.com/)
+
+---
+
+## Quick Start
+
+1. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Run Development Server:**
+   ```bash
+   npm run dev
+   ```
+
+3. **Build for Production:**
+   ```bash
+   npm run build
+   ```
+
+4. **Lint Code:**
+   ```bash
+   npm run lint
+   ```
+
