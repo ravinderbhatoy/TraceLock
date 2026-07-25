@@ -192,13 +192,13 @@ filed → pending_verification → verified → under_investigation → resolved
 
 ## Authentication Mechanism
 
-TraceLock uses JWT authentication supported by HTTP-Only secure cookies (`AUTH_COOKIE` and `REFRESH_COOKIE`) as well as standard Bearer headers for API access:
+TraceLock uses **HTTP-Only Cookies** for authentication:
 
-```
-Authorization: Bearer <access_token>
-```
+- Upon login (`POST /api/token/`) or registration (`POST /api/users/register/`), tokens are set directly in `HTTP-Only` cookies (`access_token` and `refresh_token`).
+- API requests from the frontend automatically include these cookies with credentials enabled (`CORS_ALLOW_CREDENTIALS = True`).
+- Token refresh (`POST /api/token/refresh/`) rotates tokens seamlessly in cookies.
+- Logging out (`POST /api/users/logout/`) blacklists the refresh token and clears the cookies.
 
-Tokens automatically refresh or expire based on server JWT configuration.
 
 ---
 
