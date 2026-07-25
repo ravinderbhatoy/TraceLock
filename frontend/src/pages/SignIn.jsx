@@ -1,10 +1,18 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthProvider";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
-import { useEffect } from "react";
 import ErrorMessage from "@/components/ErrorMessage";
 
 const SignIn = () => {
+
+
+  const { login, navigate, user } = useAuth();
+
+  if (user) {
+    navigate('/')
+    return
+  }
+
   const {
     register,
     handleSubmit,
@@ -12,7 +20,6 @@ const SignIn = () => {
     formState: { errors },
   } = useForm();
 
-  const { login, navigate } = useAuth();
 
   const onSubmit = async (data) => {
     try {
@@ -37,7 +44,7 @@ const SignIn = () => {
   };
 
   return (
-    <section className="flex flex-col justify-center items-center border-2 m-12 p-8 border-gray-400 rounded-2xl max-w-200 mx-auto mt-10">
+    <section className="flex flex-col justify-center items-center m-12 p-8 border-gray-400 rounded-2xl max-w-200 mx-auto mt-10">
       <h2 className="text-2xl font-semibold text-blue-500 text-center">Sign In</h2>
       <form
         className="flex w-full max-w-lg flex-col gap-4"

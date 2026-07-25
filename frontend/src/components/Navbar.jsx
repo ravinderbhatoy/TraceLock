@@ -5,42 +5,41 @@ import {
   NavbarLink,
   NavbarToggle,
 } from "flowbite-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 
 export function NavbarComponent() {
   const { user } = useAuth();
 
   return (
-    <Navbar fluid rounded>
+    <Navbar
+      className="bg-transparent! border-b border-white/10 shadow-none! sticky top-0 z-50 "
+    >
       <NavbarBrand as={Link} to="/">
-        <img
-          src="/favicon.svg"
-          className="mr-3 h-6 sm:h-9"
-          alt="Flowbite React Logo"
-        />
-        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-blue-500">
-          Tracelo{" "}
+        <img src="/favicon.svg" className="mr-3 h-8" alt="TraceLock Logo" />
+        <span className="text-2xl font-bold tracking-wide text-white">
+          Trace<span className="text-blue-400">Lock</span>
         </span>
       </NavbarBrand>
+
       <NavbarToggle />
+
       <NavbarCollapse>
-        <NavbarLink as={Link} to="/" active>
+        <NavbarLink as={Link} to="/">
           Home
         </NavbarLink>
+
         {user ? (
-          <>
-            <NavbarLink as={Link} to="/profile">
-              {user.username}
-            </NavbarLink>
-          </>
+          <NavbarLink as={Link} to="/profile">
+            {user.username}
+          </NavbarLink>
         ) : (
           <>
             <NavbarLink as={Link} to="/signin">
-              SignIn
+              Sign In
             </NavbarLink>
             <NavbarLink as={Link} to="/signup">
-              SignUp
+              Sign Up
             </NavbarLink>
           </>
         )}

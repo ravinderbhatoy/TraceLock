@@ -130,8 +130,8 @@ STATIC_URL = 'static/'
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'users.api.authentication.JWTCookieAuthentication',  # this should be first
         'rest_framework.authentication.SessionAuthentication',  # Required for web view
-        'users.api.authentication.JWTCookieAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -140,8 +140,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=20),
     'ROTATE_REFRESH_TOKENS': True,           # new refresh token on every refresh
     'BLACKLIST_AFTER_ROTATION': True,          # old refresh token becomes invalid
 

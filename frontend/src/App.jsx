@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import "./App.css";
 import { Home } from "./pages/Home";
 import { RootLayout } from "./RootLayout";
 import SignUp from "./pages/SignUp";
@@ -10,6 +9,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import ComplaintListPage from "./pages/ComplaintListPage";
 import ComplaintCreatePage from "./pages/ComplaintCreatePage";
 import ComplaintDetailsPage from "./pages/ComplaintDetailsPage";
+import "./App.css";
 
 function App() {
   return (

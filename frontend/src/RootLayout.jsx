@@ -1,15 +1,21 @@
 import { Outlet } from "react-router-dom";
 import { NavbarComponent } from "./components/Navbar";
+import FooterComp from "./components/FooterComp";
 
 export const RootLayout = () => {
   return (
-    <div>
-      {/* Your Navbar */}
+    <div className="h-screen flex flex-col  bg-[url('/images/background.png')] bg-cover bg-center bg-no-repeat text-white">
+      {/* Navbar */}
       <NavbarComponent />
-      {/* This is where the active route page will render */}
-      <main style={{ padding: "1rem" }}>
+
+      {/* Active Page Content */}
+      <main className="flex-1 overflow-auto">
         <Outlet />
       </main>
+
+      {/* Footer */}
+      <FooterComp />
     </div>
   );
-}
+};
+

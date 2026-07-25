@@ -15,7 +15,6 @@ const axiosClient = axios.create({
 });
 
 const SKIP_REFRESH_URLS = [
-  "/users/me/",
   "/token/refresh/",
   "/token/",
   "/users/logout/",
@@ -60,11 +59,17 @@ axiosClient.interceptors.response.use(
     isRefreshing = true;
     try {
       // Refresh token is httponly — browser sends the cookie automatically
+      console.log("rejection trying to refresh token")
+      // this fetches new access token by using existing valid refresh token
       await axiosClient.post("/token/refresh/");
       processRefreshQueue(null);
       return axiosClient(originalRequest);
     } catch (refreshError) {
+      console.log("rejection failed to refresh");
       processRefreshQueue(refreshError);
+      if (refreshError.response?.status === 401) {
+        window.dispatchEvent(new Event("auth:logout"));
+      }
       return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;

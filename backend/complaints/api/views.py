@@ -39,10 +39,18 @@ class CityDetails(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ComplaintList(generics.ListCreateAPIView):
-    queryset = Complaint.objects.all().order_by('-filed_at')
     serializer_class = ComplaintSerializer
     permission_classes = [permissions.IsAuthenticated,
                           IsOwnerOrReadOnly]
+
+    def get_queryset(self):
+        queryset = Complaint.objects.all().order_by('-filed_at')
+        city = self.request.query_params.get('city')
+        print(self.request.query_params)
+        print(city)
+        if city is not None:
+            queryset = queryset.filter(city__name=city)
+        return queryset
 
     # auto associate owner
     def perform_create(self, serializer):

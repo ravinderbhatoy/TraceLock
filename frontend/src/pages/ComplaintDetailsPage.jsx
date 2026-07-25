@@ -26,6 +26,7 @@ const ComplaintDetailsPage = () => {
                     pk={complaint.pk}
                     showDetails={false}
                     ownerId={complaint.filed_by}
+                    city={complaint.city_name}
                 />
             )}
         </div>
