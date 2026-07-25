@@ -144,7 +144,6 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(minutes=20),
     'ROTATE_REFRESH_TOKENS': True,           # new refresh token on every refresh
     'BLACKLIST_AFTER_ROTATION': True,          # old refresh token becomes invalid
-
     'AUTH_COOKIE': 'access_token',
     'REFRESH_COOKIE': 'refresh_token',
     'AUTH_COOKIE_HTTP_ONLY': True,

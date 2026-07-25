@@ -41,7 +41,7 @@ const Profile = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-semibold text-blue-500 text-center mb-5">
+      <h1 className="text-3xl font-semibold text-blue-500 text-center my-5">
         Your Complaints
       </h1>
       <Button className='bg-red-500' onClick={handleLogout}>Logout</Button>

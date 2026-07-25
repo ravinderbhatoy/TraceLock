@@ -46,8 +46,6 @@ class ComplaintList(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = Complaint.objects.all().order_by('-filed_at')
         city = self.request.query_params.get('city')
-        print(self.request.query_params)
-        print(city)
         if city is not None:
             queryset = queryset.filter(city__name=city)
         return queryset
