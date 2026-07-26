@@ -12,7 +12,6 @@ import { Avatar } from "flowbite-react";
 
 export function NavbarComponent() {
   const { user } = useAuth();
-  console.log(user.image)
 
   return (
     <Navbar
@@ -35,7 +34,7 @@ export function NavbarComponent() {
         {user ? (
           <NavbarLink as={Link} to="/profile">
             <div className="flex items-center gap-2">
-              <Avatar img={user.image} alt="avatar" rounded size="xs" />
+              <Avatar img={user?.image} alt="avatar" rounded size="xs" />
               {user.username}
             </div>
           </NavbarLink>
