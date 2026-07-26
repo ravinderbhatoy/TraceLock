@@ -67,7 +67,7 @@ axiosClient.interceptors.response.use(
     } catch (refreshError) {
       console.log("rejection failed to refresh");
       processRefreshQueue(refreshError);
-      if (refreshError.response?.status === 401) {
+      if (refreshError.response?.status == 401 || refreshError.response?.status == 400) {
         window.dispatchEvent(new Event("auth:logout"));
       }
       return Promise.reject(refreshError);

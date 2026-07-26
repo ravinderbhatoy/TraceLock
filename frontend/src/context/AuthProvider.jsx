@@ -5,17 +5,18 @@ import axiosClient from "@/api/axiosClient";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null
+  });
+
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const logout = async () => {
-    if (!user) {
-      return;
-    }
+    localStorage.removeItem('user')
     try {
-      const response = await axiosClient.post("/users/logout/");
-      console.log(response.data)
+      await axiosClient.post("/users/logout/");
     } catch (error) {
       console.error("Logout failed:", error.response.data);
     } finally {
@@ -28,14 +29,11 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       try {
         await axiosClient.get("/csrf/");
-        let current_user = localStorage.getItem('user')
-        current_user = JSON.parse(current_user)
-        if (!current_user) {
+        if (user) {
           const response = await axiosClient.get("/users/me/");
-          current_user = response.data;
-          localStorage.setItem('user', JSON.stringify(current_user));
+          localStorage.setItem('user', JSON.stringify(response.data));
+          setUser(response.data)
         }
-        setUser(current_user);
       } catch (error) {
         if (error.response?.status == 401) {
           console.log("Unauthorized user redirecting to login...");
@@ -57,6 +55,7 @@ export const AuthProvider = ({ children }) => {
       await axiosClient.post("/token/", { username, password });
       const response = await axiosClient.get("/users/me/");
       setUser(response.data);
+      localStorage.setItem('user', JSON.stringify(response.data));
       navigate("/profile");
     } catch (error) {
       console.log("Error while login.", error.response);

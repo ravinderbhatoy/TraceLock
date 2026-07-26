@@ -3,7 +3,6 @@ import { useAuth } from "@/context/AuthProvider";
 
 export const Home = () => {
   const { user } = useAuth();
-  console.log(user);
   return (
     <div className="h-full flex flex-col justify-center items-center text-center">
       <h1 className="text-4xl text-blue-500 font-bold">
