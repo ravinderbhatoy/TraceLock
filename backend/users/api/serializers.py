@@ -20,6 +20,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "city",
             "state",
             "address",
+            "profile_img"
         ]
 
 

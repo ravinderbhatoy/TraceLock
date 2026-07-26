@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthProvider";
 
 export const Home = () => {
+  const { user } = useAuth();
+  console.log(user);
   return (
     <div className="h-full flex flex-col justify-center items-center text-center">
       <h1 className="text-4xl text-blue-500 font-bold">
-        Welcome To Tracelo
+        Welcome To TraceLock
       </h1>
       <div className="flex gap-4 mt-6">
         <Link

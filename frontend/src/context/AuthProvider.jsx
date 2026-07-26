@@ -27,9 +27,15 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const csrfResponse = await axiosClient.get("/csrf/");
-        const response = await axiosClient.get("/users/me/"); // your user info endpoint
-        setUser(response.data);
+        await axiosClient.get("/csrf/");
+        let current_user = localStorage.getItem('user')
+        current_user = JSON.parse(current_user)
+        if (!current_user) {
+          const response = await axiosClient.get("/users/me/");
+          current_user = response.data;
+          localStorage.setItem('user', JSON.stringify(current_user));
+        }
+        setUser(current_user);
       } catch (error) {
         if (error.response?.status == 401) {
           console.log("Unauthorized user redirecting to login...");

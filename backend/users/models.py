@@ -12,6 +12,8 @@ class User(AbstractUser):
 
     address = models.TextField()
     email = models.EmailField(unique=True)
+    profile_img = models.ImageField(blank=True, upload_to='users/', null=True,
+                                    default='users/profile.webp')
 
     def is_station(self):
         return hasattr(self, 'station')

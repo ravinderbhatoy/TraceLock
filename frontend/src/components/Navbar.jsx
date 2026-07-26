@@ -7,9 +7,12 @@ import {
 } from "flowbite-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
+import { Avatar } from "flowbite-react";
+
 
 export function NavbarComponent() {
   const { user } = useAuth();
+  console.log(user.image)
 
   return (
     <Navbar
@@ -31,7 +34,10 @@ export function NavbarComponent() {
 
         {user ? (
           <NavbarLink as={Link} to="/profile">
-            {user.username}
+            <div className="flex items-center gap-2">
+              <Avatar img={user.image} alt="avatar" rounded size="xs" />
+              {user.username}
+            </div>
           </NavbarLink>
         ) : (
           <>
