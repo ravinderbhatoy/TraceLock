@@ -1,8 +1,6 @@
 # django
 
 
-
-
 ```bash
 # Core Environment & Running
 alias dj="python manage.py"

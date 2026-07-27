@@ -1,11 +1,12 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, APIView
+from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework import generics, permissions
 from rest_framework import serializers
 from complaints.models import Complaint, City, Brand
-from users.api.permissions import IsOwnerOrReadOnly
+from users.api.permissions import IsStationOrOwnerOrReadOnly
 from .serializers import (ComplaintSerializer, CitySerializer,
+                          ComplaintStatusUpdateSerializer,
                           BrandSerializer)
 
 
@@ -40,8 +41,7 @@ class CityDetails(generics.RetrieveUpdateDestroyAPIView):
 
 class ComplaintList(generics.ListCreateAPIView):
     serializer_class = ComplaintSerializer
-    permission_classes = [permissions.IsAuthenticated,
-                          IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         queryset = Complaint.objects.all().order_by('-filed_at')
@@ -54,14 +54,25 @@ class ComplaintList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         user = self.request.user
         city = serializer.validated_data.get('city')
-        print(serializer.validated_data)
-        if not city:
-            raise serializers.ValidationError("City is required")
-        if not hasattr(city, 'station'):
+        if not hasattr(city, "station"):
             raise serializers.ValidationError(
-                "No station found for selected city")
+                "No station found for selected city"
+            )
         serializer.save(filed_by=user,
                         station=city.station)
+
+
+class ComplaintDetails(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Complaint.objects.all()
+    permission_classes = [
+        permissions.IsAuthenticated,
+        IsStationOrOwnerOrReadOnly,
+    ]
+
+    def get_serializer_class(self):
+        if self.request.user.is_station():
+            return ComplaintStatusUpdateSerializer
+        return ComplaintSerializer
 
 
 class UserComplaintList(generics.ListAPIView):
@@ -73,11 +84,3 @@ class UserComplaintList(generics.ListAPIView):
         queryset = Complaint.objects.filter(filed_by=user)
 
         return queryset
-
-
-class ComplaintDetails(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Complaint.objects.all()
-    serializer_class = ComplaintSerializer
-
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly]

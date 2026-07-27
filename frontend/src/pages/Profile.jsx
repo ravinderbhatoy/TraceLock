@@ -18,7 +18,7 @@ const Profile = () => {
         if (response && response.data) {
           setComplaints(response.data.results);
         }
-      } catch (err) {
+      } catch (error) {
         if (error.response) {
           if (error.response.status == 401) {
             await logout()
@@ -44,7 +44,7 @@ const Profile = () => {
       <h1 className="text-3xl font-semibold text-blue-500 text-center my-5">
         Your Complaints
       </h1>
-      <Button className='bg-red-500' onClick={handleLogout}>Logout</Button>
+      <Button color='red' onClick={handleLogout}>Logout</Button>
       {complaints?.length ? (
         <ul className="flex flex-col gap-10 items-center">
           {complaints.map((complaint) => (

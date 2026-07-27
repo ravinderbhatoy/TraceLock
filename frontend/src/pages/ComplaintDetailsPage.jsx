@@ -16,7 +16,7 @@ const ComplaintDetailsPage = () => {
     }, [])
 
     return (
-        <div>
+        <div className="m-5">
             {complaint && (
                 <ComplaintCard
                     brand={complaint.brand}
@@ -27,6 +27,7 @@ const ComplaintDetailsPage = () => {
                     showDetails={false}
                     ownerId={complaint.filed_by}
                     city={complaint.city_name}
+                    status={complaint.status}
                 />
             )}
         </div>

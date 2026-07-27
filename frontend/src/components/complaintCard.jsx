@@ -1,7 +1,8 @@
 import axiosClient from "@/api/axiosClient";
 import { useAuth } from "@/context/AuthProvider";
-import { Button, Card } from "flowbite-react";
+import { Button, Card, Badge } from "flowbite-react";
 import { Link } from "react-router-dom";
+
 
 const ComplaintCard = (props) => {
   const { user, navigate, loading } = useAuth()
@@ -13,26 +14,36 @@ const ComplaintCard = (props) => {
 
   return (
     <Card className="w-full max-w-3xl">
-      <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-        {props.brand} {props.model} {props.type == 'S' ? 'Stolen' : "Lost"}
-        <p className="text-xs text-gray-500 dark:text-gray-400">{props.city}</p>
-      </h5>
+      <div className="flex justify-between items-center">
+        <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          {props.brand} {props.model} {props.type == 'S' ? 'Stolen' : "Lost"}
+          <p className="text-xs text-gray-500 dark:text-gray-400">{props.city}</p>
+        </h5>
+        {!props.showDetails &&
+          <Badge color={props.status == 'rejected' ? "failure" : "green"}>
+            {props.status}
+          </Badge>
+        }
+      </div>
       <p className="font-normal text-gray-700 dark:text-gray-400">
         {props.desc}
       </p>
-      {props.showDetails &&
+      {
+        props.showDetails &&
         <Link to={`/complaints/${props.pk}`}>
           <Button>
             Read more
           </Button>
         </Link>
       }
-      {user && user.id == props.ownerId && (
-        <Button color="red" onClick={handleDelete}>
-          Delete
-        </Button>
-      )}
-    </Card>
+      {
+        user && user.id == props.ownerId && (
+          <Button color="red" onClick={handleDelete}>
+            Delete
+          </Button>
+        )
+      }
+    </Card >
   );
 }
 

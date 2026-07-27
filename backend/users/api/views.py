@@ -148,7 +148,8 @@ class UserMeView(APIView):
             'first_name': user.first_name,
             'last_name': user.last_name,
             'city': user.city.name,
-            'image': request.build_absolute_uri(user.profile_img.url) if user.profile_img else None
+            'image': request.build_absolute_uri(user.profile_img.url) if user.profile_img else None,
+            'is_station': user.is_station()
         })
 
 

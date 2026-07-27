@@ -2,6 +2,25 @@ from rest_framework import serializers
 from complaints.models import Complaint, City, Brand
 
 
+FIELDS = [
+    "pk",
+    "url",  # links view(complaint-detail) automatically
+    "filed_by",
+    "model",
+    "brand",
+    "brand_name",
+    "case",
+    "city",
+    "city_name",
+    "state",
+    "date_of_incidence",
+    "desc",
+    "filed_at",
+    "station",
+    "status",
+]
+
+
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
@@ -13,12 +32,21 @@ class CitySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = City
-        fields = [
-            "url",  # links view(complaint-detail) automatically
-            "id",
-            "name",
-            "state"
-        ]
+
+
+class ComplaintStatusUpdateSerializer(serializers.ModelSerializer):
+
+    url = serializers.HyperlinkedIdentityField(view_name="complaint-detail")
+    state = serializers.ReadOnlyField(source="city.state.name")
+    station = serializers.ReadOnlyField(source="station.name")
+    # Read-only representation for GET requests
+    brand_name = serializers.ReadOnlyField(source="brand.name")
+    city_name = serializers.ReadOnlyField(source='city.name')
+
+    class Meta:
+        model = Complaint
+        fields = FIELDS
+        read_only_fields = [field for field in FIELDS if field != 'status']
 
 
 class ComplaintSerializer(serializers.ModelSerializer):
@@ -33,27 +61,12 @@ class ComplaintSerializer(serializers.ModelSerializer):
 
     city = serializers.PrimaryKeyRelatedField(write_only=True, queryset=City.objects.all())
     city_name = serializers.ReadOnlyField(source='city.name')
+    status = serializers.ReadOnlyField()
 
     class Meta:
         model = Complaint
-        fields = [
-            "pk",
-            "url",  # links view(complaint-detail) automatically
-            "filed_by",
-            "model",
-            "brand",
-            "brand_name",
-            "case",
-            "city",
-            "city_name",
-            "state",
-            "date_of_incidence",
-            "desc",
-            "filed_at",
-            "station",
-            "status",
-        ]
-        read_only_fields = ["filed_by", "station"]
+        fields = FIELDS
+        read_only_fields = ['station', 'status', 'filed_by']
 
 # from documentation
 # Our snippet and user serializers include 'url' fields that by default

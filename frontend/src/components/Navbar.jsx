@@ -7,11 +7,15 @@ import {
 } from "flowbite-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
-import { Avatar } from "flowbite-react";
-
+import { Avatar, Dropdown, DropdownItem } from "flowbite-react";
 
 export function NavbarComponent() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout()
+    navigate("/")
+  }
 
   return (
     <Navbar
@@ -27,17 +31,18 @@ export function NavbarComponent() {
       <NavbarToggle />
 
       <NavbarCollapse>
-        <NavbarLink as={Link} to="/">
-          Home
-        </NavbarLink>
-
         {user ? (
-          <NavbarLink as={Link} to="/profile">
-            <div className="flex items-center gap-2">
-              <Avatar img={user?.image} alt="avatar" rounded size="xs" />
-              {user.username}
-            </div>
-          </NavbarLink>
+          <div className="flex items-center gap-2">
+            <Avatar img={user?.image} alt="avatar" rounded size="xs" />
+            <Dropdown label={user.username} inline>
+              <DropdownItem as={Link} to="/profile">
+                Profile
+              </DropdownItem>
+              <DropdownItem>My Complaints</DropdownItem>
+              <DropdownItem>Settings</DropdownItem>
+              <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+            </Dropdown>
+          </div>
         ) : (
           <>
             <NavbarLink as={Link} to="/signin">

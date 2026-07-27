@@ -25,10 +25,8 @@ from users.api.views import (CustomTokenObtainPairView,
                              CustomRefreshTokenView, CSRFAPIView)
 
 urlpatterns = [
-    path('', include("complaints.urls")),
     path("api/csrf/", CSRFAPIView.as_view(), name='csrf-token'),
     path('admin/', admin.site.urls),
-    path('users/', include("users.urls")),
     path('api/users/', include('users.api.urls')),
     path('api/complaints/', include('complaints.api.urls')),
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),

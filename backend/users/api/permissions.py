@@ -14,3 +14,20 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         # Write permissions are only allowed to the owner of the complaints.
         return obj.filed_by == request.user
+
+
+class IsStationOrOwnerOrReadOnly(permissions.BasePermission):
+
+    """
+    Custom permission to owners and stations edit complaints
+    """
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        print(request.user.is_station())
+        return (
+            obj.filed_by == request.user
+            or request.user.is_station()
+        )

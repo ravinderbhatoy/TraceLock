@@ -73,7 +73,6 @@ class Complaint(models.Model):
                                 null=True, related_name='complaints', blank=True)
 
     STATUS_CHOICES = [
-        ('filed', 'Filed'),
         ('pending_verification', 'Pending Verification'),
         ('verified', 'Verified'),
         ('rejected', 'Rejected'),

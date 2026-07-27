@@ -2,9 +2,10 @@
 - [x] Understand the axiosClient (interceptors)
 - [x] Filters results
 - [x] Profile Image upload
-- [] Confirm post deletion
-- [] Station login
+- [x] Station login
 - [] Managing status of complaints by stations
+- [] complaint photos
+- [] Confirm post deletion
 - [] Email updates
 - [] contact number field
 - [] Details section station only fields

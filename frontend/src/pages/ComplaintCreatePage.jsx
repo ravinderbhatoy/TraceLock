@@ -69,7 +69,7 @@ const ComplaintCreatePage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center items-center border-2  p-4 border-gray-400 rounded-2xl shadow-lg max-w-200 mx-auto mt-10">
+    <div className="flex flex-col justify-center items-center p-4 max-w-200 mx-auto">
       <h2 className="text-2xl font-semibold text-blue-500 text-center">
         Register Complaint
       </h2>
