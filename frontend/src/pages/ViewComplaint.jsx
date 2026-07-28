@@ -3,13 +3,13 @@ import axiosClient from "../api/axiosClient";
 import ComplaintCard from "@/components/complaintCard";
 import { useState, useEffect } from "react";
 
-const ComplaintDetailsPage = () => {
+const ViewComplaint = () => {
     const [complaint, setComplaint] = useState(null)
     const params = useParams()
 
     useEffect(() => {
         const fetchComplaint = async () => {
-            const response = await axiosClient.get(`/complaints/${params.pk}/`)
+            const response = await axiosClient.get(`/complaints/${params.id}/`)
             setComplaint(response.data)
         }
         fetchComplaint()
@@ -23,7 +23,7 @@ const ComplaintDetailsPage = () => {
                     model={complaint.model}
                     type={complaint.case}
                     desc={complaint.desc}
-                    pk={complaint.pk}
+                    id={complaint.id}
                     showDetails={false}
                     ownerId={complaint.filed_by}
                     city={complaint.city_name}
@@ -34,4 +34,4 @@ const ComplaintDetailsPage = () => {
     )
 }
 
-export default ComplaintDetailsPage
+export default ViewComplaint

@@ -6,10 +6,11 @@ import SignIn from "./pages/SignIn";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./utils/ProtectedRoute";
 
-import ComplaintListPage from "./pages/ComplaintListPage";
-import ComplaintCreatePage from "./pages/ComplaintCreatePage";
-import ComplaintDetailsPage from "./pages/ComplaintDetailsPage";
+import ListComplaints from "./pages/ListComplaints";
+import RegisterComplaint from "./pages/RegisterComplaint";
+import ViewComplaint from "./pages/ViewComplaint";
 import "./App.css";
+import EditComplaint from "./pages/EditComplaint";
 
 function App() {
   return (
@@ -21,9 +22,10 @@ function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/profile" element={<Profile />} />
-          <Route path="/complaints/:pk" element={<ComplaintDetailsPage />} />
-          <Route path="/complaints" element={<ComplaintListPage />} />
-          <Route path="/register" element={<ComplaintCreatePage />} />
+          <Route path="/complaints/:id" element={<ViewComplaint />} />
+          <Route path="/complaints" element={<ListComplaints />} />
+          <Route path="/register" element={<RegisterComplaint />} />
+          <Route path="/complaints/:id/edit" element={<EditComplaint />} />
         </Route>
       </Route>
     </Routes>

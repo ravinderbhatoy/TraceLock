@@ -6,7 +6,7 @@ import { useSearchParams } from "react-router-dom";
 
 import { Dropdown, DropdownItem } from "flowbite-react";
 
-export const ComplaintListPage = () => {
+export const ListComplaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [error, setError] = useState(false);
   const { loading, logout } = useAuth();
@@ -67,14 +67,14 @@ export const ComplaintListPage = () => {
   if (loading) return <p>Loading complaint... </p>;
 
   return (
-    <div className="my-5">
-      <div className="flex justify-around">
-        <h1 className="text-3xl font-semibold text-blue-500 text-center mb-5">
+    <div className="my-10">
+      <div className="flex justify-around mb-10">
+        <h1 className="text-3xl font-semibold text-blue-500 text-center">
           Recent Complaints
         </h1>
 
         {/* City Filter */}
-        <Dropdown label={selectedCity ? `City: ${selectedCity}` : "Filter by City"} inline>
+        <Dropdown label={selectedCity ? `City: ${selectedCity}` : "Select City"} inline>
           <DropdownItem onClick={() => handleFilterChange("city", "")}>All Cities</DropdownItem>
           {cities.length ? (
             cities.map((city) => (
@@ -89,13 +89,13 @@ export const ComplaintListPage = () => {
       {complaints?.length ? (
         <ul className="flex flex-col gap-10 items-center">
           {complaints.map((complaint) => (
-            <li key={complaint.pk} className="w-full flex justify-center">
+            <li key={complaint.id} className="w-full flex justify-center">
               <ComplaintCard
                 brand={complaint.brand_name}
                 model={complaint.model}
                 type={complaint.case}
                 desc={complaint.desc}
-                pk={complaint.pk}
+                id={complaint.id}
                 city={complaint.city_name}
                 showDetails={true}
               />
@@ -112,4 +112,4 @@ export const ComplaintListPage = () => {
     </div>);
 };
 
-export default ComplaintListPage;
+export default ListComplaints;

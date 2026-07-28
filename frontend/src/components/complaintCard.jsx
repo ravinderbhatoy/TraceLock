@@ -8,7 +8,7 @@ const ComplaintCard = (props) => {
   const { user, navigate, loading } = useAuth()
 
   const handleDelete = async () => {
-    await axiosClient.delete(`/complaints/${props.pk}/`)
+    await axiosClient.delete(`/complaints/${props.id}/`)
     navigate('/complaints')
   }
 
@@ -30,19 +30,20 @@ const ComplaintCard = (props) => {
       </p>
       {
         props.showDetails &&
-        <Link to={`/complaints/${props.pk}`}>
-          <Button>
-            Read more
-          </Button>
+        <Link to={`/complaints/${props.id}`} className="text-blue-500 hover:underline">
+          View
         </Link>
       }
-      {
-        user && user.id == props.ownerId && (
-          <Button color="red" onClick={handleDelete}>
+      {user && user.id == props.ownerId && (
+        <div className="flex gap-4">
+          <Button className="!bg-red-500" onClick={handleDelete}>
             Delete
           </Button>
-        )
-      }
+          <Button className="!bg-green-500" onClick={() => { navigate(`/complaints/${props.id}/edit`) }}>
+            Edit
+          </Button>
+        </div>
+      )}
     </Card >
   );
 }

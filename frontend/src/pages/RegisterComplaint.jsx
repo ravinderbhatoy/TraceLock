@@ -14,7 +14,7 @@ import { useAuth } from "@/context/AuthProvider";
 import ErrorMessage from "@/components/ErrorMessage";
 
 
-const ComplaintCreatePage = () => {
+const RegisterComplaint = () => {
   const today = new Date();
   const {
     handleSubmit,
@@ -183,4 +183,4 @@ const ComplaintCreatePage = () => {
   );
 };
 
-export default ComplaintCreatePage;
+export default RegisterComplaint;

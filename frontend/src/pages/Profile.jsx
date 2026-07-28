@@ -3,12 +3,11 @@ import React from 'react'
 import ComplaintCard from '@/components/complaintCard';
 import { useState, useEffect } from 'react';
 import axiosClient from '@/api/axiosClient';
-import { Button } from 'flowbite-react';
 
 const Profile = () => {
   const [complaints, setComplaints] = useState([]);
   const [error, setError] = useState(false);
-  const { loading, logout, navigate, user } = useAuth();
+  const { loading, logout, user } = useAuth();
 
   useEffect(() => {
     const fetchComplaint = async () => {
@@ -30,31 +29,25 @@ const Profile = () => {
     fetchComplaint();
   }, []);
 
-  const handleLogout = async () => {
-    await logout()
-    navigate("/")
-  }
-
   if (error) return <p>Something went wrong...</p>;
   if (loading) return <p>Loading complaint... </p>;
 
 
   return (
-    <div>
-      <h1 className="text-3xl font-semibold text-blue-500 text-center my-5">
+    <div className='my-10'>
+      <h1 className="text-3xl font-semibold text-blue-500 text-center mb-10">
         {user.is_station ? 'Pending Complaints' : 'Your Complaints'}
       </h1>
-      <Button color='red' onClick={handleLogout}>Logout</Button>
       {complaints?.length ? (
         <ul className="flex flex-col gap-10 items-center">
           {complaints.map((complaint) => (
-            <li key={complaint.pk} className="w-full flex justify-center">
+            <li key={complaint.id} className="w-full flex justify-center">
               <ComplaintCard
                 brand={complaint.brand_name}
                 model={complaint.model}
                 type={complaint.case}
                 desc={complaint.desc}
-                pk={complaint.pk}
+                id={complaint.id}
                 showDetails={true}
               />
             </li>

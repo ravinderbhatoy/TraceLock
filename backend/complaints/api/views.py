@@ -81,6 +81,6 @@ class UserComplaintList(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        queryset = Complaint.objects.filter(filed_by=user)
+        queryset = Complaint.objects.filter(filed_by=user).order_by('-filed_at')
 
         return queryset
