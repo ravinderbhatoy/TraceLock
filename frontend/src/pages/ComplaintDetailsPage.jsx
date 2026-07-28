@@ -19,7 +19,7 @@ const ComplaintDetailsPage = () => {
         <div className="m-5">
             {complaint && (
                 <ComplaintCard
-                    brand={complaint.brand}
+                    brand={complaint.brand_name}
                     model={complaint.model}
                     type={complaint.case}
                     desc={complaint.desc}

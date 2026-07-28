@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthProvider";
 import ComplaintCard from "@/components/complaintCard";
 import { useSearchParams } from "react-router-dom";
 
-import { Dropdown, DropdownItem, DropdownHeader, DropdownDivider } from "flowbite-react";
+import { Dropdown, DropdownItem } from "flowbite-react";
 
 export const ComplaintListPage = () => {
   const [complaints, setComplaints] = useState([]);
@@ -14,8 +14,6 @@ export const ComplaintListPage = () => {
   const [cities, setCities] = useState([])
 
   const selectedCity = searchParams.get("city") || "";
-  const selectedBrand = searchParams.get("brand") || "";
-  const selectedOrdering = searchParams.get("ordering") || "-created_at";
 
   // Helper function to update search parameters
   const handleFilterChange = (key, value) => {
@@ -93,7 +91,7 @@ export const ComplaintListPage = () => {
           {complaints.map((complaint) => (
             <li key={complaint.pk} className="w-full flex justify-center">
               <ComplaintCard
-                brand={complaint.brand}
+                brand={complaint.brand_name}
                 model={complaint.model}
                 type={complaint.case}
                 desc={complaint.desc}

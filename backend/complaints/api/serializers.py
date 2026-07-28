@@ -32,6 +32,7 @@ class CitySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = City
+        fields = ['name', 'state']
 
 
 class ComplaintStatusUpdateSerializer(serializers.ModelSerializer):
