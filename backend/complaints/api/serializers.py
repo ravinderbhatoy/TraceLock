@@ -66,7 +66,7 @@ class ComplaintSerializer(serializers.ModelSerializer):
     city = serializers.PrimaryKeyRelatedField(write_only=True, queryset=City.objects.all())
     city_id = serializers.IntegerField(source='city.id', read_only=True)
     city_name = serializers.ReadOnlyField(source='city.name')
-    status = serializers.ReadOnlyField()
+    status = serializers.ReadOnlyField(source='get_status_display')
 
     class Meta:
         model = Complaint

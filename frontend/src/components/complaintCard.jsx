@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 
 const ComplaintCard = (props) => {
-  const { user, navigate, loading } = useAuth()
+  const { user, navigate } = useAuth()
 
   const handleDelete = async () => {
     await axiosClient.delete(`/complaints/${props.id}/`)
@@ -13,7 +13,7 @@ const ComplaintCard = (props) => {
   }
 
   return (
-    <Card className="w-full max-w-3xl">
+    <Card className="w-full max-w-3xl bg-slate-900/60! background-blue-md!">
       <div className="flex justify-between items-center">
         <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           {props.brand} {props.model} {props.type == 'S' ? 'Stolen' : "Lost"}

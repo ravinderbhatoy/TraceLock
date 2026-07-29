@@ -62,6 +62,11 @@ class Complaint(models.Model):
     model = models.CharField(max_length=100)
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL,
                               related_name='complaints', null=True, blank=True)
+    images = models.ImageField(
+        upload_to='complaints/',
+        blank=True,
+        null=True
+    )
 
     desc = models.TextField()
     case = models.CharField(max_length=1, choices=CASE_CHOICES)
