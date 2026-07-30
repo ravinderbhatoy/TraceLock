@@ -9,6 +9,8 @@ urlpatterns = [
     path("city/<int:pk>/", views.CityDetails.as_view(), name="city-detail"),
     path("<int:pk>/", views.ComplaintDetails.as_view(), name="complaint-detail"),
     path("profile/", views.UserComplaintList.as_view(), name="user-complaints"),
+    path("<int:pk>/images/", views.ComplaintImageList.as_view(),
+         name="complaint-images"),
 ]
 
 # our API will be able to handle URLs such as http://example.com/api/items/4.json.

@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthProvider";
 
 const ViewComplaint = () => {
     const [complaint, setComplaint] = useState(null)
+    const [images, setImages] = useState(null)
 
     const statusMap = {
         "Pending Verification": 0,
@@ -26,11 +27,13 @@ const ViewComplaint = () => {
     }
 
     useEffect(() => {
-        const fetchComplaint = async () => {
-            const response = await axiosClient.get(`/complaints/${params.id}/`)
-            setComplaint(response.data)
+        const fetchData = async () => {
+            const complaintsResponse = await axiosClient.get(`/complaints/${params.id}/`)
+            const imageResponse = await axiosClient.get(`/complaints/${params.id}/images/`)
+            setComplaint(complaintsResponse.data)
+            setImages(imageResponse.data.results)
         }
-        fetchComplaint()
+        fetchData()
     }, [])
 
     return (
@@ -65,6 +68,15 @@ const ViewComplaint = () => {
                             <Button className="!bg-green-500" onClick={() => { navigate(`/complaints/${complaint.id}/edit`) }}>
                                 Edit
                             </Button>
+                        </div>
+                    )}
+                    {user && user.id == complaint.filed_by && images && images.length > 0 && (
+                        <div>
+                            <div className="flex gap-4">
+                                {images.map((image) => (
+                                    <img key={image.id} src={image.image} alt={image.description} className="w-24 h-24 object-cover" />
+                                ))}
+                            </div>
                         </div>
                     )}
                     <ComplaintTimeline filed_on={complaint.filed_at} stage={complaintStage} />

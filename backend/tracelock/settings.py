@@ -131,8 +131,8 @@ STATIC_URL = 'static/'
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'users.api.authentication.JWTCookieAuthentication',  # this should be first
         'rest_framework.authentication.SessionAuthentication',  # Required for web view
+        'users.api.authentication.JWTCookieAuthentication',  # this should be first
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',

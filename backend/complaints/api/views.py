@@ -3,10 +3,11 @@ from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework import generics, permissions
 from rest_framework import serializers
-from complaints.models import Complaint, City, Brand
+from complaints.models import Complaint, City, Brand, ComplaintImage
 from users.api.permissions import IsStationOrOwnerOrReadOnly
 from .serializers import (ComplaintSerializer, CitySerializer,
                           ComplaintStatusUpdateSerializer,
+                          ComplaintImageSerializer,
                           BrandSerializer)
 
 
@@ -37,6 +38,15 @@ class CityDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = City.objects.all()
     serializer_class = CitySerializer
     permission_classes = [permissions.AllowAny]
+
+
+class ComplaintImageList(generics.ListAPIView):
+    serializer_class = ComplaintImageSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        complaint_id = self.kwargs.get('pk')
+        return ComplaintImage.objects.filter(complaint=complaint_id)
 
 
 class ComplaintList(generics.ListCreateAPIView):

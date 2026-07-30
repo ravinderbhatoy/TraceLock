@@ -44,6 +44,17 @@ def validate_not_future_day(value):
                 "The date of incidence cannot be in the future.")
 
 
+class ComplaintImage(models.Model):
+    complaint = models.ForeignKey('Complaint', on_delete=models.CASCADE,
+                                  related_name='images')
+    image = models.ImageField(upload_to='complaints/',
+                              null=True,
+                              blank=True)
+
+    def __str__(self):
+        return f"{self.complaint.brand} {self.complaint.model} - Image {self.id}"
+
+
 class Complaint(models.Model):
     CASE_CHOICES = [
         ('S', 'Stolen'),
@@ -62,11 +73,6 @@ class Complaint(models.Model):
     model = models.CharField(max_length=100)
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL,
                               related_name='complaints', null=True, blank=True)
-    images = models.ImageField(
-        upload_to='complaints/',
-        blank=True,
-        null=True
-    )
 
     desc = models.TextField()
     case = models.CharField(max_length=1, choices=CASE_CHOICES)
