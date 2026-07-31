@@ -1,15 +1,15 @@
 from django.contrib import admin
 from .models import (Complaint, State, City, Brand,
-                     ComplaintImage)
+                     ComplaintFile)
 
 
-class ComplaintImageInline(admin.TabularInline):
-    model = ComplaintImage
+class ComplaintFileInline(admin.TabularInline):
+    model = ComplaintFile
 
 
 class ComplaintAdmin(admin.ModelAdmin):
     inlines = [
-        ComplaintImageInline
+        ComplaintFileInline
     ]
 
 

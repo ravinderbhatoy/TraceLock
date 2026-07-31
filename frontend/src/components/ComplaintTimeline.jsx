@@ -15,8 +15,6 @@ const ComplaintTimeline = (props) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const filed_on = date.toLocaleDateString('en-US', options);
 
-    console.log(props.stage)
-
     return (
         <Timeline className="mt-5">
             <TimelineItem>

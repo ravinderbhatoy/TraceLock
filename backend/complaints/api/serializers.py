@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from complaints.models import Complaint, City, Brand, ComplaintImage
+from complaints.models import Complaint, City, Brand, ComplaintFile
 
 
 FIELDS = [
@@ -37,9 +37,9 @@ class CitySerializer(serializers.HyperlinkedModelSerializer):
         fields = ['id', 'name', 'state']
 
 
-class ComplaintImageSerializer(serializers.ModelSerializer):
+class ComplaintFileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ComplaintImage
+        model = ComplaintFile
         fields = '__all__'
 
 

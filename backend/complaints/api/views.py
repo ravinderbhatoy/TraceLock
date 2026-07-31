@@ -3,12 +3,13 @@ from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework import generics, permissions
 from rest_framework import serializers
-from complaints.models import Complaint, City, Brand, ComplaintImage
+from complaints.models import Complaint, City, Brand, ComplaintFile
 from users.api.permissions import IsStationOrOwnerOrReadOnly
 from .serializers import (ComplaintSerializer, CitySerializer,
                           ComplaintStatusUpdateSerializer,
-                          ComplaintImageSerializer,
+                          ComplaintFileSerializer,
                           BrandSerializer)
+from django.db import transaction
 
 
 @api_view(['GET'])
@@ -40,13 +41,13 @@ class CityDetails(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.AllowAny]
 
 
-class ComplaintImageList(generics.ListAPIView):
-    serializer_class = ComplaintImageSerializer
+class ComplaintFileList(generics.ListAPIView):
+    serializer_class = ComplaintFileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         complaint_id = self.kwargs.get('pk')
-        return ComplaintImage.objects.filter(complaint=complaint_id)
+        return ComplaintFile.objects.filter(complaint=complaint_id)
 
 
 class ComplaintList(generics.ListCreateAPIView):
@@ -61,15 +62,42 @@ class ComplaintList(generics.ListCreateAPIView):
         return queryset
 
     # auto associate owner
+    @transaction.atomic
     def perform_create(self, serializer):
         user = self.request.user
         city = serializer.validated_data.get('city')
-        if not hasattr(city, "station"):
+        files = self.request.FILES.getlist('files')
+        print(files)
+
+        ALLOWED_TYPES = {
+            "image/png",
+            "image/jpeg",
+            "application/pdf",
+        }
+
+        if len(files) > 5:
             raise serializers.ValidationError(
-                "No station found for selected city"
+                "You can upload a maximum of 5 files."
             )
-        serializer.save(filed_by=user,
-                        station=city.station)
+
+        for file in files:
+            if file.content_type not in ALLOWED_TYPES:
+                raise serializers.ValidationError(
+                    f"{file.name} is not an allowed file type."
+                )
+
+        # Atomicity
+        with transaction.atomic():
+            complaint = serializer.save(
+                filed_by=user,
+                station=city.station
+            )
+
+            for file in files:
+                ComplaintFile.objects.create(
+                    complaint=complaint,
+                    file=file
+                )
 
 
 class ComplaintDetails(generics.RetrieveUpdateDestroyAPIView):

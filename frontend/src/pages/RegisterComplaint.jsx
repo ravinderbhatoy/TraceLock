@@ -24,6 +24,7 @@ const RegisterComplaint = () => {
     register,
     setValue,
     setError,
+    clearErrors,
     formState: { errors },
   } = useForm();
 
@@ -35,37 +36,62 @@ const RegisterComplaint = () => {
   const { navigate } = useAuth()
 
   const handleFileChange = (event) => {
-    setError("files", null)
-    // limit file size
-    const maxFileSize = 1024 * 1024; // 1MB
-    for (let file of event.target.files) {
+    clearErrors("files");
+    const selectedFiles = Array.from(event.target.files || []);
+    const maxFileSize = 2 * 1024 * 1024; // 2MB
+    const allowedFileTypes = ["application/pdf", "image/png", "image/jpeg", "image/jpg"];
+    // Validate size and file type
+    for (let file of selectedFiles) {
       if (file.size > maxFileSize) {
-        setError("files", { type: "server", message: "Maximum file size is 1MB" });
-        return
+        setError("files", { type: "server", message: "Maximum file size is 2MB" });
+        return;
+      }
+      if (!allowedFileTypes.includes(file.type)) {
+        setError("files", { type: "server", message: "Invalid file type. Only PDF, PNG, JPEG, and JPG are allowed" });
+        return;
       }
     }
-
-    if (files.length >= 5) {
+    // Deduplicate incoming files by name
+    const newFiles = selectedFiles.filter(
+      (file) => !files.some((existingFile) => existingFile.name === file.name)
+    );
+    // Enforce 5 files limit total
+    if (files.length + newFiles.length > 5) {
       setError("files", { type: "server", message: "Maximum 5 files can be uploaded" });
-      return
+      return;
     }
-    if (event.target.files) {
-      // only allow unique uploads
-      const newFiles = Array.from(event.target.files).filter((file) => {
-        return !files.some((existingFile) => existingFile.name === file.name)
-      })
-      setFiles([...files, ...newFiles])
-    }
+    setFiles([...files, ...newFiles]);
+    event.target.value = "";
   }
+
+  console.log(files)
 
   const onSubmit = async (data) => {
     setIsUploading(true)
-    const json = JSON.stringify(data);
+    const formData = new FormData();
+
+    // Append files array
+    files.forEach(file => {
+      formData.append("files", file);
+    });
+
+    // Append form fields
+    Object.entries(data).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        const formattedValue = value instanceof Date ? value.toISOString() : value;
+        formData.append(key, formattedValue)
+      }
+    });
     try {
-      const response = await axiosClient.post("/complaints/", json);
+      const response = await axiosClient.post("/complaints/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       if (response.status === 201) {
         navigate('/complaints')
       }
+      console.log("Complaint submitted successfully")
     } catch (error) {
       console.log("Complaint registration errror", error.response.data);
       if (error.response && error.response.data) {
@@ -81,7 +107,11 @@ const RegisterComplaint = () => {
             setError(field, { type: "server", message });
           }
         })
+      } else {
+        setError("root", { type: "server", message: "Something went wrong. Please try again." })
       }
+    } finally {
+      setIsUploading(false)
     }
   };
 
@@ -98,16 +128,18 @@ const RegisterComplaint = () => {
     fetchCities();
   }, []);
 
-  console.log(files)
-
   return (
     <div className="flex flex-col justify-center items-center p-4 max-w-200 mx-auto">
       <h2 className="text-2xl font-semibold text-blue-500 text-center">
         Register Complaint
       </h2>
+      {errors.root && <ErrorMessage message={errors.root.message} />}
       <form
         className="flex w-full max-w-lg flex-col gap-4"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={(e) => {
+          clearErrors();
+          handleSubmit(onSubmit)(e);
+        }}
       >
         <div>
           <div className="mb-2 block">
@@ -141,7 +173,7 @@ const RegisterComplaint = () => {
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="files">Verification Images</Label>
+            <Label htmlFor="files">Upload Images</Label>
           </div>
           <div className="flex w-full items-center justify-center">
             <Label
@@ -169,7 +201,7 @@ const RegisterComplaint = () => {
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG or PDF (Max uploads 5)</p>
               </div>
-              <FileInput id="dropzone-file" className="hidden" multiple onChange={handleFileChange} />
+              <FileInput accept="image/png, image/jpeg, image/jpg, application/pdf" id="dropzone-file" className="hidden" multiple onChange={handleFileChange} />
             </Label>
           </div>
           {errors.files && (
@@ -184,7 +216,7 @@ const RegisterComplaint = () => {
                   </ListItem>
                 ))}
               </List>
-              <Button className="mt-2" color="light" size="sm" onClick={() => setFiles([])}>Clear</Button>
+              <Button type="button" className="mt-2" color="light" size="sm" onClick={() => { setFiles([]); clearErrors("files"); }}>Clear</Button>
             </div>
           )}
         </div>
@@ -258,7 +290,9 @@ const RegisterComplaint = () => {
             <ErrorMessage message={errors.date_of_incidence.message} />
           )}
         </div>
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isUploading}>
+          {isUploading ? "Submitting..." : "Submit"}
+        </Button>
       </form >
     </div >
   );

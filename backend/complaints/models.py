@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 
 
 class Brand(models.Model):
@@ -44,15 +45,19 @@ def validate_not_future_day(value):
                 "The date of incidence cannot be in the future.")
 
 
-class ComplaintImage(models.Model):
+class ComplaintFile(models.Model):
     complaint = models.ForeignKey('Complaint', on_delete=models.CASCADE,
-                                  related_name='images')
-    image = models.ImageField(upload_to='complaints/',
-                              null=True,
-                              blank=True)
+                                  related_name='files')
+    file = models.FileField(upload_to='complaints/',
+                            null=True,
+                            validators=[
+                                FileExtensionValidator(
+                                    allowed_extensions=['pdf', 'png', 'jpeg', 'jpg']
+                                )],
+                            blank=True)
 
     def __str__(self):
-        return f"{self.complaint.brand} {self.complaint.model} - Image {self.id}"
+        return f"{self.complaint.brand} {self.complaint.model} - File {self.id}"
 
 
 class Complaint(models.Model):

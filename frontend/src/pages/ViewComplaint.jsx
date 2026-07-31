@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthProvider";
 
 const ViewComplaint = () => {
     const [complaint, setComplaint] = useState(null)
-    const [images, setImages] = useState(null)
+    const [files, setFiles] = useState(null)
 
     const statusMap = {
         "Pending Verification": 0,
@@ -17,6 +17,7 @@ const ViewComplaint = () => {
         "Resolved": 4,
         "Closed": 5
     };
+
     const complaintStage = statusMap[complaint?.status] || null;
 
     const params = useParams()
@@ -29,9 +30,9 @@ const ViewComplaint = () => {
     useEffect(() => {
         const fetchData = async () => {
             const complaintsResponse = await axiosClient.get(`/complaints/${params.id}/`)
-            const imageResponse = await axiosClient.get(`/complaints/${params.id}/images/`)
+            const filesResponse = await axiosClient.get(`/complaints/${params.id}/files/`)
             setComplaint(complaintsResponse.data)
-            setImages(imageResponse.data.results)
+            setFiles(filesResponse.data.results)
         }
         fetchData()
     }, [])
@@ -70,12 +71,15 @@ const ViewComplaint = () => {
                             </Button>
                         </div>
                     )}
-                    {user && user.id == complaint.filed_by && images && images.length > 0 && (
+                    {user && user.id == complaint.filed_by && files && files.length > 0 && (
                         <div>
                             <div className="flex gap-4">
-                                {images.map((image) => (
-                                    <img key={image.id} src={image.image} alt={image.description} className="w-24 h-24 object-cover" />
-                                ))}
+                                {files.map((file) => {
+                                    const fileExt = file.file.split('.').pop().toLowerCase();
+                                    if (fileExt !== 'pdf') {
+                                        return <img key={file.id} src={file.file} alt={file.description} className="w-24 h-24 object-cover" />
+                                    }
+                                })}
                             </div>
                         </div>
                     )}
