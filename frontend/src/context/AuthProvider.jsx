@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "@/api/axiosClient";
+import { Spinner } from "flowbite-react";
 
 const AuthContext = createContext();
 
@@ -64,8 +65,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
+
     <AuthContext.Provider value={{ user, login, logout, loading, navigate }}>
-      {loading ? null : children}
+      {loading ? <div className="flex justify-center items-center h-screen"><Spinner size="xl" /></div> : children}
     </AuthContext.Provider>
   );
 };

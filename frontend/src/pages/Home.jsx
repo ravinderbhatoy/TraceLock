@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthProvider";
 
-export const Home = () => {
+const Home = () => {
   const { user } = useAuth();
   return (
     <div className="h-full flex flex-col justify-center items-center text-center">
@@ -36,4 +36,6 @@ export const Home = () => {
     </div>
   );
 };
+
+export default Home;
 

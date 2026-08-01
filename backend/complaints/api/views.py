@@ -4,7 +4,7 @@ from rest_framework.reverse import reverse
 from rest_framework import generics, permissions
 from rest_framework import serializers
 from complaints.models import Complaint, City, Brand, ComplaintFile
-from users.api.permissions import IsStationOrOwnerOrReadOnly
+from users.api.permissions import IsStationOrOwnerOrReadOnly, IsOwnerOrReadOnly
 from .serializers import (ComplaintSerializer, CitySerializer,
                           ComplaintStatusUpdateSerializer,
                           ComplaintFileSerializer,
@@ -38,7 +38,6 @@ class CityList(generics.ListAPIView):
 class CityDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = City.objects.all()
     serializer_class = CitySerializer
-    permission_classes = [permissions.AllowAny]
 
 
 class ComplaintFileList(generics.ListAPIView):
@@ -104,7 +103,7 @@ class ComplaintDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Complaint.objects.all()
     permission_classes = [
         permissions.IsAuthenticated,
-        IsStationOrOwnerOrReadOnly,
+        IsOwnerOrReadOnly,
     ]
 
     def get_serializer_class(self):

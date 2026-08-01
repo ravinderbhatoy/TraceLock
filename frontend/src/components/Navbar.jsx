@@ -10,7 +10,7 @@ import { useAuth } from "../context/AuthProvider";
 import { Avatar, Dropdown, DropdownItem } from "flowbite-react";
 
 export function NavbarComponent() {
-  const { user, logout } = useAuth();
+  const { user, logout, navigate } = useAuth();
 
   const handleLogout = async () => {
     await logout()

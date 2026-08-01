@@ -10,8 +10,10 @@ import {
 } from "flowbite-react";
 import axiosClient from "../api/axiosClient";
 import ErrorMessage from "@/components/ErrorMessage";
+import { useAuth } from "@/context/AuthProvider";
 
 const SignUp = () => {
+  const { navigate } = useAuth()
   const [cities, setCities] = useState([]);
   const {
     register,
@@ -21,9 +23,14 @@ const SignUp = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const json = JSON.stringify(data);
+    const payload = { ...data, city: parseInt(data.city, 10) };
+    const json = JSON.stringify(payload);
     try {
       const response = await axiosClient.post("/users/register/", json);
+      console.log(response.status)
+      if (response.status === 201) {
+        navigate('/signin')
+      }
     } catch (error) {
       if (error.response && error.response.data) {
         const serverErrors = error.response.data;
@@ -119,7 +126,7 @@ const SignUp = () => {
             type="email"
             {...register("email", { required: "Email is required" })}
           />
-          {errors.email && <errormessage message={errors.email.message} />}
+          {errors.email && <ErrorMessage message={errors.email.message} />}
         </div>
         <div>
           <div className="mb-2 block">
