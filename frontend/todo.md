@@ -4,9 +4,11 @@
 - [x] Profile Image upload
 - [x] Station login
 - [x] Complaint audit trails
-- [] complaint photos
+- [x] complaint photos
 - [] Email updates
 - [] Confirm post deletion
+- [] Notify after deletion, Registration
+
 - [] contact number field
 - [] Managing status of complaints by stations
 - [] Details section station only fields

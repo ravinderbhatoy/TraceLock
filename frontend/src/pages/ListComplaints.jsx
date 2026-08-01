@@ -4,67 +4,95 @@ import { useAuth } from "../context/AuthProvider";
 import ComplaintCard from "@/components/complaintCard";
 import { useSearchParams } from "react-router-dom";
 
-import { Dropdown, DropdownItem } from "flowbite-react";
+import { Dropdown, DropdownItem, Pagination, Spinner } from "flowbite-react";
 
 export const ListComplaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [error, setError] = useState(false);
-  const { loading, logout } = useAuth();
+  const { logout } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [cities, setCities] = useState([])
+  const [cities, setCities] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [pagination, setPagination] = useState({
+    count: 0,
+    next: null,
+    previous: null,
+  });
 
   const selectedCity = searchParams.get("city") || "";
+  const page = parseInt(searchParams.get("page"), 10) || 1;
 
-  // Helper function to update search parameters
-  const handleFilterChange = (key, value) => {
+  // Helper function to update city filter
+  const handleCityChange = (cityName) => {
     const updatedParams = new URLSearchParams(searchParams);
-    if (value) {
-      updatedParams.set(key, value);
+    if (cityName) {
+      updatedParams.set("city", cityName);
     } else {
-      updatedParams.delete(key);
+      updatedParams.delete("city");
     }
+    updatedParams.set("page", "1");
+    setSearchParams(updatedParams);
+  };
+
+  // Helper function to update page number in URL
+  const handlePageChange = (newPage) => {
+    const updatedParams = new URLSearchParams(searchParams);
+    updatedParams.set("page", newPage.toString());
     setSearchParams(updatedParams);
   };
 
   useEffect(() => {
     const fetchCities = async () => {
-      const response = await axiosClient.get("/complaints/cities/");
-      setCities(response.data.results);
+      try {
+        const response = await axiosClient.get("/complaints/cities/");
+        setCities(response.data.results || response.data || []);
+      } catch (err) {
+        console.error("Error fetching cities:", err);
+      }
     };
     fetchCities();
   }, []);
 
   useEffect(() => {
-    console.log('Query parameter changed to:', searchParams);
-    // Fetch data or trigger updates here
-  }, [searchParams]);
-
-  useEffect(() => {
     const fetchComplaint = async () => {
+      setLoading(true);
+      setError(false);
       try {
-        // fetch complaints
         const response = await axiosClient.get("/complaints/", {
           params: {
+            page: page,
             city: selectedCity || undefined,
-          }
+          },
         });
         if (response && response.data) {
-          setComplaints(response.data.results);
+          setComplaints(response.data.results || []);
+          setPagination({
+            count: response.data.count || 0,
+            next: response.data.next,
+            previous: response.data.previous,
+          });
         }
       } catch (err) {
-        if (error.response) {
-          if (error.response.status == 401) {
-            await logout()
-          }
+        if (err.response && err.response.status === 401) {
+          await logout();
         }
         setError(true);
+      } finally {
+        setLoading(false);
       }
     };
     fetchComplaint();
-  }, [searchParams]);
+  }, [page, selectedCity]);
 
-  if (error) return <p>Something went wrong...</p>;
-  if (loading) return <p>Loading complaint... </p>;
+  if (error) return <p className="text-center text-red-500 my-10">Something went wrong...</p>;
+  if (loading)
+    return (
+      <div className="flex h-screen justify-center items-center">
+        <Spinner size="xl" aria-label="Loading spinner" />
+      </div>
+    );
+
+  const totalPages = Math.ceil(pagination.count / 10) || 1;
 
   return (
     <div className="my-10">
@@ -75,14 +103,14 @@ export const ListComplaints = () => {
 
         {/* City Filter */}
         <Dropdown label={selectedCity ? `City: ${selectedCity}` : "Select City"} inline>
-          <DropdownItem onClick={() => handleFilterChange("city", "")}>All Cities</DropdownItem>
-          {cities.length ? (
-            cities.map((city) => (
-              <DropdownItem key={city.id} onClick={() => handleFilterChange("city", city.name)}>
+          <DropdownItem onClick={() => handleCityChange("")}>All Cities</DropdownItem>
+          {cities.length
+            ? cities.map((city) => (
+              <DropdownItem key={city.id} onClick={() => handleCityChange(city.name)}>
                 {city.name}
               </DropdownItem>
             ))
-          ) : null}
+            : null}
         </Dropdown>
       </div>
 
@@ -101,15 +129,23 @@ export const ListComplaints = () => {
               />
             </li>
           ))}
+          {totalPages > 1 && (
+            <div className="flex overflow-x-auto sm:justify-center">
+              <Pagination
+                totalPages={totalPages}
+                currentPage={page}
+                onPageChange={handlePageChange}
+              />
+            </div>
+          )}
         </ul>
       ) : (
         <div className="flex flex-col items-center justify-center my-20 text-center">
-          <p className="text-2xl font-semibold text-gray-300">
-            No complaints found.
-          </p>
+          <p className="text-2xl font-semibold text-gray-300">No complaints found.</p>
         </div>
       )}
-    </div>);
+    </div>
+  );
 };
 
 export default ListComplaints;

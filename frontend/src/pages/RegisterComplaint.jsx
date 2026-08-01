@@ -64,7 +64,6 @@ const RegisterComplaint = () => {
     event.target.value = "";
   }
 
-  console.log(files)
 
   const onSubmit = async (data) => {
     setIsUploading(true)
@@ -91,9 +90,7 @@ const RegisterComplaint = () => {
       if (response.status === 201) {
         navigate('/complaints')
       }
-      console.log("Complaint submitted successfully")
     } catch (error) {
-      console.log("Complaint registration errror", error.response.data);
       if (error.response && error.response.data) {
         const serverErrors = error.response.data;
         Object.keys(serverErrors).forEach((field) => {
