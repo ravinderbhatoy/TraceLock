@@ -4,17 +4,28 @@ import {
   NavbarCollapse,
   NavbarLink,
   NavbarToggle,
+  TextInput,
+  Button,
 } from "flowbite-react";
+import { HiSearch } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import { Avatar, Dropdown, DropdownItem } from "flowbite-react";
+import { useState } from "react";
 
 export function NavbarComponent() {
   const { user, logout, navigate } = useAuth();
+  const [search, setSearch] = useState("")
 
   const handleLogout = async () => {
     await logout()
     navigate("/")
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("searching", search)
+    navigate(`/complaints?search=${search}`)
   }
 
   return (
@@ -29,6 +40,14 @@ export function NavbarComponent() {
       </NavbarBrand>
 
       <NavbarToggle />
+
+      <NavbarCollapse>
+        <form className="flex max-w-md gap-4 items-center" action="" onSubmit={handleSubmit}>
+          <TextInput value={search} onChange={(e) => setSearch(e.target.value)} icon={HiSearch} placeholder="Search by device or brand" sizing="sm" />
+          <Button type="submit" size="sm">Search</Button>
+        </form>
+      </NavbarCollapse>
+
 
       <NavbarCollapse>
         {user ? (

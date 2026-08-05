@@ -5,13 +5,16 @@
 - [x] Station login
 - [x] Complaint audit trails
 - [x] complaint photos
-- [] Station dashboard
-- [] Search complaints
-- [] Email updates
 
+
+- [x] Search complaints
 - [] Confirm post deletion
+- [] Email updates
 - [] Notify after deletion, Registration
-
 - [] contact number field
+
+-- Station
+ 
+- [] Station dashboar
 - [] Managing status of complaints by stations
 - [] Details section station only fields

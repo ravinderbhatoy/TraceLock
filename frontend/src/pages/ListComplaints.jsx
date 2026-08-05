@@ -21,6 +21,7 @@ export const ListComplaints = () => {
 
   const selectedCity = searchParams.get("city") || "";
   const page = parseInt(searchParams.get("page"), 10) || 1;
+  const search = searchParams.get("search") || "";
 
   // Helper function to update city filter
   const handleCityChange = (cityName) => {
@@ -62,6 +63,7 @@ export const ListComplaints = () => {
           params: {
             page: page,
             city: selectedCity || undefined,
+            search: search || undefined,
           },
         });
         if (response && response.data) {
@@ -82,7 +84,7 @@ export const ListComplaints = () => {
       }
     };
     fetchComplaint();
-  }, [page, selectedCity]);
+  }, [page, selectedCity, search]);
 
   if (error) return <p className="text-center text-red-500 my-10">Something went wrong...</p>;
   if (loading)

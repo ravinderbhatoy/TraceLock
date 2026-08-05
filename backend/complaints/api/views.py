@@ -1,8 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
-from rest_framework import generics, permissions
-from rest_framework import serializers
+from rest_framework import generics, permissions, serializers, filters
 from complaints.models import Complaint, City, Brand, ComplaintFile
 from users.api.permissions import IsStationOrOwnerOrReadOnly, IsOwnerOrReadOnly
 from .serializers import (ComplaintSerializer, CitySerializer,
@@ -52,6 +51,8 @@ class ComplaintFileList(generics.ListAPIView):
 class ComplaintList(generics.ListCreateAPIView):
     serializer_class = ComplaintSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['brand__name', 'model']
 
     def get_queryset(self):
         queryset = Complaint.objects.all().order_by('-filed_at')

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
 import axiosClient from "../api/axiosClient";
-import { Button, Card, Badge } from "flowbite-react";
+import { Button, Card, Badge, Alert } from "flowbite-react";
 import { useState, useEffect } from "react";
 import ComplaintTimeline from "@/components/ComplaintTimeline";
 import { useAuth } from "@/context/AuthProvider";
@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthProvider";
 const ViewComplaint = () => {
     const [complaint, setComplaint] = useState(null)
     const [files, setFiles] = useState(null)
+    const [showAlert, setShowAlert] = useState(false)
 
     const statusMap = {
         "Pending Verification": 0,
@@ -22,6 +23,7 @@ const ViewComplaint = () => {
 
     const params = useParams()
     const { user, navigate } = useAuth()
+
     const handleDelete = async () => {
         await axiosClient.delete(`/complaints/${complaint.id}/`)
         navigate('/complaints')
@@ -39,6 +41,10 @@ const ViewComplaint = () => {
 
     return (
         <div className="m-5">
+            {showAlert &&
+                alert("Are you sure you want to delete this complaint?")
+            }
+
             {complaint && (
                 <Card className="w-full bg-slate-900/60! background-blue-md! ">
                     <div className="flex justify-between items-center">
@@ -63,7 +69,7 @@ const ViewComplaint = () => {
                     }
                     {complaintStage < 4 && user && user.id == complaint.filed_by && (
                         <div className="flex gap-4">
-                            <Button className="!bg-red-500" onClick={handleDelete}>
+                            <Button className="!bg-red-500" onClick={() => setShowAlert(true)}>
                                 Delete
                             </Button>
                             <Button className="!bg-green-500" onClick={() => { navigate(`/complaints/${complaint.id}/edit`) }}>
