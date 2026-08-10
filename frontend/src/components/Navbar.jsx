@@ -14,7 +14,7 @@ import { Avatar, Dropdown, DropdownItem } from "flowbite-react";
 import { useState } from "react";
 
 export function NavbarComponent() {
-  const { user, logout, navigate } = useAuth();
+  const { user, logout, navigate, isStation } = useAuth();
   const [search, setSearch] = useState("")
 
   const handleLogout = async () => {
@@ -40,7 +40,6 @@ export function NavbarComponent() {
       </NavbarBrand>
 
       <NavbarToggle />
-
       <NavbarCollapse>
         <form className="flex max-w-md gap-4 items-center" action="" onSubmit={handleSubmit}>
           <TextInput value={search} onChange={(e) => setSearch(e.target.value)} icon={HiSearch} placeholder="Search by device or brand" sizing="sm" />
@@ -54,11 +53,13 @@ export function NavbarComponent() {
           <div className="flex items-center gap-2">
             <Avatar img={user?.image} alt="avatar" rounded size="xs" />
             <Dropdown label={user.username} inline>
-              <DropdownItem as={Link} to="/profile">
-                Profile
-              </DropdownItem>
-              <DropdownItem>My Complaints</DropdownItem>
-              <DropdownItem>Settings</DropdownItem>
+              {isStation ? (
+                <DropdownItem as={Link} to="/dashboard">Dashboard</DropdownItem>
+              ) :
+                <DropdownItem as={Link} to="/profile">
+                  Profile
+                </DropdownItem>
+              }
               <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
             </Dropdown>
           </div>

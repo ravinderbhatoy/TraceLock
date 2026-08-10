@@ -15,6 +15,7 @@
 
 -- Station
  
-- [] Station dashboar
+- [] Station theme
+- [] Station dashboard
 - [] Managing status of complaints by stations
 - [] Details section station only fields

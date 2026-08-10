@@ -12,30 +12,46 @@ import ViewComplaint from "./pages/ViewComplaint";
 import "./App.css";
 import EditComplaint from "./pages/EditComplaint";
 import { Suspense, lazy } from "react";
+import { createTheme, ThemeProvider } from "flowbite-react";
+import NotFound from "./components/NotFound";
+import NotAuthorized from "./components/NotAuthorized";
+import Dashboard from "./pages/station/Dashboard";
 
+// const stationTheme = createTheme({
+//   button: {
+//     color: {
+//       primary: "bg-green-500 hover:bg-green-600",
+//       secondary: "bg-red-500 hover:bg-red-600",
+//     }
+//   }
+// })
 
 const Home = lazy(() => import("./pages/Home"));
 
 function App() {
   return (
-    <Suspense fallback={<div className="flex justify-center items-center h-screen"><Spinner size="xl" /></div>}>
-      <Routes>
-        <Route element={<RootLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+    <ThemeProvider>
+      <Suspense fallback={<div className="flex justify-center items-center h-screen"><Spinner size="xl" /></div>}>
+        <Routes>
+          <Route element={<RootLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/unauthorized" element={<NotAuthorized />} />
+            <Route path="*" element={<NotFound />} />
 
-          <Route element={<ProtectedRoute />}>
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/complaints/:id" element={<ViewComplaint />} />
-            <Route path="/complaints" element={<ListComplaints />} />
-            <Route path="/register" element={<RegisterComplaint />} />
-            <Route path="/complaints/:id/edit" element={<EditComplaint />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/complaints/:id" element={<ViewComplaint />} />
+              <Route path="/complaints" element={<ListComplaints />} />
+              <Route path="/register" element={<RegisterComplaint />} />
+              <Route path="/complaints/:id/edit" element={<EditComplaint />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </Suspense>
-
+        </Routes>
+      </Suspense>
+    </ThemeProvider>
   );
 }
 
