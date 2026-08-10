@@ -31,4 +31,4 @@ class Station(models.Model):
     address = models.TextField()
 
     def __str__(self):
-        return f"{self.name} ({self.city})"
+        return f"{self.name}"

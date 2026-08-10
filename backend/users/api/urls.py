@@ -9,5 +9,6 @@ urlpatterns = [
     path("stations/<int:pk>/", views.StationDetail.as_view(), name='station-detail'),
     path("auth/", include('rest_framework.urls')),
     path('register/', views.UserRegistrationView.as_view(), name='register'),
-    path("logout/", views.LogoutView.as_view(), name="logout")
+    path("logout/", views.LogoutView.as_view(), name="logout"),
+    path("station/dashboard/", views.StationDashboardStatsView.as_view(), name="dashboard")
 ]

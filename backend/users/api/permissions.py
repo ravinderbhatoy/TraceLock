@@ -31,3 +31,8 @@ class IsStationOrOwnerOrReadOnly(permissions.BasePermission):
             obj.filed_by == request.user
             or request.user.is_station()
         )
+
+
+class IsStation(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return request.user.is_station()

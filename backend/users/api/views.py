@@ -5,8 +5,11 @@ from rest_framework.views import APIView
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.middleware.csrf import get_token
+from complaints.models import Complaint
+
 
 from rest_framework import generics, permissions, status
+from .permissions import IsStation
 from users.models import User, Station
 from .serializers import (UserSerializer, StationSerializer,
                           UserRegistrationSerializer, LoginSerializer)
@@ -172,3 +175,23 @@ class StationList(generics.ListAPIView):
 class StationDetail(generics.RetrieveAPIView):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
+
+
+class StationDashboardStatsView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsStation]
+
+    def get(self, request):
+        station = hasattr(request.user,  'station')
+        if not station:
+            return Response({'detail': 'Not authorized'},
+                            status=status.HTTP_403_FORBIDDEN)
+        print('station is:', station)  # TODO this is giving true
+        qs = Complaint.objects.filter(station=station)
+        data = {
+            'filed': qs.filter(status='pending_verification').count(),
+            'verified': qs.filter(status='verified').count(),
+            'resolved': qs.filter(status='resolved').count(),
+            'under_investigation': qs.filter(status='under_investigation').count(),
+            'total': qs.count(),
+        }
+        return Response(data)

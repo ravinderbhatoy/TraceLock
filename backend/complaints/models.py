@@ -69,16 +69,13 @@ class Complaint(models.Model):
         'users.User', on_delete=models.CASCADE,
         related_name='complaints'
     )
-
     city = models.ForeignKey(
         City, on_delete=models.PROTECT,
         related_name='complaints'
     )
-
     model = models.CharField(max_length=100)
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL,
                               related_name='complaints', null=True, blank=True)
-
     desc = models.TextField()
     case = models.CharField(max_length=1, choices=CASE_CHOICES)
     date_of_incidence = models.DateTimeField(null=True,
@@ -96,8 +93,10 @@ class Complaint(models.Model):
         ('resolved', 'Resolved'),
         ('closed', 'Closed'),
     ]
+
     status = models.CharField(
-        max_length=30, choices=STATUS_CHOICES, default='filed')
+        max_length=30, choices=STATUS_CHOICES, default='pending_verification')
+
     rejection_reason = models.CharField(max_length=100, blank=True)
     verified_at = models.DateTimeField(null=True, blank=True)
     resolved_at = models.DateTimeField(null=True, blank=True)

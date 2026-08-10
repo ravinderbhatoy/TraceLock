@@ -2,6 +2,8 @@ from rest_framework import serializers
 from users.models import User, Station
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import PasswordField
+from complaints.models import Complaint
+from complaints.api.serializers import ComplaintSerializer
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -59,6 +61,7 @@ class StationSerializer(serializers.HyperlinkedModelSerializer):
     city = serializers.ReadOnlyField(source="city.name")
     state = serializers.ReadOnlyField(source="city.state.name")
     user = serializers.ReadOnlyField(source="user.username")
+    complaints = ComplaintSerializer(many=True, read_only=True)
 
     class Meta:
         model = Station
@@ -70,4 +73,5 @@ class StationSerializer(serializers.HyperlinkedModelSerializer):
             "address",
             "state",
             "address",
+            "complaints"
         ]
