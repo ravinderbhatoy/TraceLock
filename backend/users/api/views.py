@@ -181,11 +181,11 @@ class StationDashboardStatsView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsStation]
 
     def get(self, request):
-        station = hasattr(request.user,  'station')
+        station = getattr(request.user,  'station', None)
         if not station:
             return Response({'detail': 'Not authorized'},
                             status=status.HTTP_403_FORBIDDEN)
-        print('station is:', station)  # TODO this is giving true
+        print('station is:', station)
         qs = Complaint.objects.filter(station=station)
         data = {
             'filed': qs.filter(status='pending_verification').count(),

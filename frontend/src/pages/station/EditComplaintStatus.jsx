@@ -1,46 +1,32 @@
 import { useParams } from "react-router-dom"
 import axiosClient from "../api/axiosClient";
-import { Button, Card, Badge, Alert, Select } from "flowbite-react";
+import { Button, Card, Badge, Select } from "flowbite-react";
 import { useState, useEffect } from "react";
 import ComplaintTimeline from "@/components/ComplaintTimeline";
 import { useAuth } from "@/context/AuthProvider";
 
-const ViewComplaint = () => {
+const EditComplaintStatus = () => {
     const [complaint, setComplaint] = useState(null)
     const [files, setFiles] = useState(null)
     const [showAlert, setShowAlert] = useState(false)
-    const [status, setStatus] = useState(complaint?.status)
 
     const statusMap = {
-        "pending_verification": 0,
-        "verified": 1,
-        "rejected": 2,
-        "under_investigation": 3,
-        "resolved": 4,
-        "closed": 5
+        "Pending Verification": 0,
+        "Verified": 1,
+        "Rejected": 2,
+        "Under Investigation": 3,
+        "Resolved": 4,
+        "Closed": 5
     };
 
-
+    const complaintStage = statusMap[complaint?.status] || null;
 
     const params = useParams()
-    const { user, navigate, isStation } = useAuth()
-    const complaintStage = statusMap[complaint?.status] || null;
+    const { user, navigate } = useAuth()
 
     const handleDelete = async () => {
         await axiosClient.delete(`/complaints/${complaint.id}/`)
         navigate('/complaints')
-    }
-
-    const updateStatus = async (e) => {
-        e.preventDefault()
-        try {
-            const response = await axiosClient.put(`/complaints/${complaint.id}/`, { status: status })
-            if (response.status == 200) {
-                complaintStage = statusMap[status]
-            }
-        } catch (error) {
-            console.log("Error updating status")
-        }
     }
 
     useEffect(() => {
@@ -104,20 +90,6 @@ const ViewComplaint = () => {
                         </div>
                     )}
                     <ComplaintTimeline filed_on={complaint.filed_at} stage={complaintStage} />
-                    {isStation &&
-                        <form onSubmit={updateStatus}>
-                            <Select value={status} onChange={(e) => setStatus(e.target.value)}>
-                                <option value="pending_verification">Pending Verification</option>
-                                <option value="verified">Verified</option>
-                                <option value="rejected">Rejected</option>
-                                <option value="under_investigation">Under Investigation</option>
-                                <option value="resolved">Resolved</option>
-                                <option value="closed">Closed</option>
-                            </Select>
-                            <br />
-                            <Button type="submit">Update</Button>
-                        </form>
-                    }
                 </Card >
             )}
         </div>

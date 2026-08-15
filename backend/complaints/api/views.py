@@ -104,7 +104,6 @@ class ComplaintDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Complaint.objects.all()
     permission_classes = [
         permissions.IsAuthenticated,
-        IsOwnerOrReadOnly,
     ]
 
     def get_serializer_class(self):
