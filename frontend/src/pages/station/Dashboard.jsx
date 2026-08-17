@@ -28,9 +28,9 @@ const Dashboard = () => {
 
     return (
         <div className='grid grid-cols-1 gap-8 p-8 max-w-4xl mx-auto md:grid-cols-3 sm:grid-cols-2'>
-            <KPI title="Filed" value={states?.filed} total={states?.total} icon={<HiFire />} color="text-red-500" description="Total number of complaints" />
-            <KPI title="Investigating" value={states?.under_investigation} total={states?.total} icon={<HiInformationCircle />} color="text-yellow-500" description="Total number of complaints" />
-            <KPI title="Resolved" value={states?.resolved} total={states?.total} icon={<HiInformationCircle />} color="text-green-500" description="Total number of complaints" />
+            <KPI title="Received" value={states?.filed} total={states?.total} icon={<HiFire />} color="text-blue-500" />
+            <KPI title="Investigating" value={states?.under_investigation} total={states?.total} icon={<HiInformationCircle />} color="text-yellow-500" />
+            <KPI title="Resolved" value={states?.resolved} total={states?.total} icon={<HiInformationCircle />} color="text-green-500" />
         </div>
     )
 }

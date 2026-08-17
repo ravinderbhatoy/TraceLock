@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
 import axiosClient from "../api/axiosClient";
-import { Button, Card, Badge, Alert, Select } from "flowbite-react";
+import { Button, Card, Badge, Select } from "flowbite-react";
 import { useState, useEffect } from "react";
 import ComplaintTimeline from "@/components/ComplaintTimeline";
 import { useAuth } from "@/context/AuthProvider";
@@ -11,8 +11,6 @@ const ViewComplaint = () => {
     const [showAlert, setShowAlert] = useState(false)
     const [status, setStatus] = useState(complaint?.status)
     const [refresh, setRefresh] = useState(0)
-
-    console.log('status', status)
 
     const statusMap = {
         "pending_verification": 0,
