@@ -36,7 +36,10 @@ export const AuthProvider = ({ children }) => {
           const response = await axiosClient.get("/users/me/");
           localStorage.setItem('user', JSON.stringify(response.data));
           setUser(response.data)
-          setIsStation(response.data.is_station)
+          setIsStation({
+            isStation: response.data.is_station,
+            city: response.data.city
+          })
         }
       } catch (error) {
         if (error.response?.status == 401) {

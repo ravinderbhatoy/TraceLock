@@ -10,16 +10,18 @@ const ViewComplaint = () => {
     const [files, setFiles] = useState(null)
     const [showAlert, setShowAlert] = useState(false)
     const [status, setStatus] = useState(complaint?.status)
+    const [refresh, setRefresh] = useState(0)
+
+    console.log('status', status)
 
     const statusMap = {
         "pending_verification": 0,
         "verified": 1,
-        "rejected": 2,
+        "rejected": -1,
         "under_investigation": 3,
         "resolved": 4,
         "closed": 5
     };
-
 
 
     const params = useParams()
@@ -33,6 +35,10 @@ const ViewComplaint = () => {
 
     const updateStatus = async (e) => {
         e.preventDefault()
+        if (status === complaint?.status) {
+            console.log("No changes")
+            return
+        }
         try {
             const response = await axiosClient.put(`/complaints/${complaint.id}/`, { status: status })
             if (response.status == 200) {
@@ -41,6 +47,7 @@ const ViewComplaint = () => {
         } catch (error) {
             console.log("Error updating status")
         }
+        setRefresh((prev) => prev + 1)
     }
 
     useEffect(() => {
@@ -49,9 +56,10 @@ const ViewComplaint = () => {
             const filesResponse = await axiosClient.get(`/complaints/${params.id}/files/`)
             setComplaint(complaintsResponse.data)
             setFiles(filesResponse.data.results)
+            setStatus(complaintsResponse.data.status)
         }
         fetchData()
-    }, [])
+    }, [refresh])
 
     return (
         <div className="m-5">
@@ -104,7 +112,9 @@ const ViewComplaint = () => {
                         </div>
                     )}
                     <ComplaintTimeline filed_on={complaint.filed_at} stage={complaintStage} />
-                    {isStation &&
+                    {complaintStage == -1 &&
+                        <p className="text-red-500 text-center italic">This complaint has been rejected</p>}
+                    {isStation?.city == complaint.city_name &&
                         <form onSubmit={updateStatus}>
                             <Select value={status} onChange={(e) => setStatus(e.target.value)}>
                                 <option value="pending_verification">Pending Verification</option>
@@ -115,7 +125,7 @@ const ViewComplaint = () => {
                                 <option value="closed">Closed</option>
                             </Select>
                             <br />
-                            <Button type="submit">Update</Button>
+                            <Button disabled={status == complaint?.status} type="submit">Update</Button>
                         </form>
                     }
                 </Card >

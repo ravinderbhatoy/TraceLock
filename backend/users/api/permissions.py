@@ -26,7 +26,6 @@ class IsStationOrOwnerOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        print(request.user.is_station())
         return (
             obj.filed_by == request.user
             or request.user.is_station()
