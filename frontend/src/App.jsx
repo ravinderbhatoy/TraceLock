@@ -16,12 +16,17 @@ import NotFound from "./components/NotFound";
 import NotAuthorized from "./components/NotAuthorized";
 import Dashboard from "./pages/station/Dashboard";
 
-
 const Home = lazy(() => import("./pages/Home"));
 
 function App() {
   return (
-    <Suspense fallback={<div className="flex justify-center items-center h-screen"><Spinner size="xl" /></div>}>
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center h-screen">
+          <Spinner size="xl" />
+        </div>
+      }
+    >
       <Routes>
         <Route element={<RootLayout />}>
           <Route path="/" element={<Home />} />

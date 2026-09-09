@@ -6,24 +6,24 @@ import { Spinner } from "flowbite-react";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isStation, setIsStation] = useState(null)
+  const [isStation, setIsStation] = useState(null);
   const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : null
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
   });
 
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const logout = async () => {
-    localStorage.removeItem('user')
+    localStorage.removeItem("user");
     try {
       await axiosClient.post("/users/logout/");
     } catch (error) {
       console.error("Logout failed:", error.response.data);
     } finally {
       setUser(null);
-      setIsStation(null)
+      setIsStation(null);
     }
   };
 
@@ -34,12 +34,12 @@ export const AuthProvider = ({ children }) => {
         await axiosClient.get("/csrf/");
         if (user) {
           const response = await axiosClient.get("/users/me/");
-          localStorage.setItem('user', JSON.stringify(response.data));
-          setUser(response.data)
+          localStorage.setItem("user", JSON.stringify(response.data));
+          setUser(response.data);
           setIsStation({
             isStation: response.data.is_station,
-            city: response.data.city
-          })
+            city: response.data.city,
+          });
         }
       } catch (error) {
         if (error.response?.status == 401) {
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
           navigate("/signin");
         }
         setUser(null);
-        setIsStation(null)
+        setIsStation(null);
       } finally {
         setLoading(false);
       }
@@ -62,23 +62,30 @@ export const AuthProvider = ({ children }) => {
       await axiosClient.post("/token/", { username, password });
       const response = await axiosClient.get("/users/me/");
       setUser(response.data);
-      setIsStation(response.data.is_station)
-      localStorage.setItem('user', JSON.stringify(response.data));
+      setIsStation(response.data.is_station);
+      localStorage.setItem("user", JSON.stringify(response.data));
       navigate("/profile");
     } catch (error) {
       console.log("Error while login.", error.response);
-      setUser(null)
-      setIsStation(null)
+      setUser(null);
+      setIsStation(null);
       throw error; // <-- re-throw so the form's catch still runs
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, navigate, isStation }}>
-      {loading ? <div className="flex justify-center items-center h-screen"><Spinner size="xl" /></div> : children}
+    <AuthContext.Provider
+      value={{ user, login, logout, loading, navigate, isStation }}
+    >
+      {loading ? (
+        <div className="flex justify-center items-center h-screen">
+          <Spinner size="xl" />
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };
-
 
 export const useAuth = () => useContext(AuthContext);

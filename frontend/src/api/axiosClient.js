@@ -14,11 +14,7 @@ const axiosClient = axios.create({
   xsrfHeaderName: "X-CSRFToken",
 });
 
-const SKIP_REFRESH_URLS = [
-  "/token/refresh/",
-  "/token/",
-  "/users/logout/",
-];
+const SKIP_REFRESH_URLS = ["/token/refresh/", "/token/", "/users/logout/"];
 
 let isRefreshing = false;
 let refreshQueue = [];
@@ -59,7 +55,7 @@ axiosClient.interceptors.response.use(
     isRefreshing = true;
     try {
       // Refresh token is httponly — browser sends the cookie automatically
-      console.log("rejection trying to refresh token")
+      console.log("rejection trying to refresh token");
       // this fetches new access token by using existing valid refresh token
       await axiosClient.post("/token/refresh/");
       processRefreshQueue(null);
@@ -67,7 +63,10 @@ axiosClient.interceptors.response.use(
     } catch (refreshError) {
       console.log("rejection failed to refresh");
       processRefreshQueue(refreshError);
-      if (refreshError.response?.status == 401 || refreshError.response?.status == 400) {
+      if (
+        refreshError.response?.status == 401 ||
+        refreshError.response?.status == 400
+      ) {
         window.dispatchEvent(new Event("auth:logout"));
       }
       return Promise.reject(refreshError);
